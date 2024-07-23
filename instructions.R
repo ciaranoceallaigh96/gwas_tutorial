@@ -31,6 +31,43 @@ replace_na_with_mean <- function(x) {
     return(x)
 }
 
+
+
+# Define a function to create a Manhattan plot
+manhattan_plot <- function(data, main_title) {
+  # Order data by chromosome and position
+  data <- data[order(data$CHR, data$BP), ]
+  
+  # Create a cumulative position for each SNP
+  data$cumulative_bp <- NA
+  current_chromosome <- 0
+  cumulative_bp <- 0
+  for (i in 1:nrow(data)) {
+    if (data$CHR[i] != current_chromosome) {
+      current_chromosome <- data$CHR[i]
+      cumulative_bp <- max(data$cumulative_bp, na.rm = TRUE)
+    }
+    data$cumulative_bp[i] <- cumulative_bp + data$BP[i]
+  }
+  
+  # Define colors for chromosomes
+  colors <- rep(c("blue", "red"), length.out = max(data$CHR))
+  
+  # Create plot
+  plot(data$cumulative_bp, data$logP, pch = 20, col = colors[data$CHR], 
+       xlab = "Chromosome", ylab = "-log10(p-value)", main = main_title)
+  
+  # Add chromosome labels
+  chromosome_labels <- unique(data$CHR)
+  chromosome_ticks <- sapply(chromosome_labels, function(chr) {
+    mean(data$cumulative_bp[data$CHR == chr])
+  })
+  axis(1, at = chromosome_ticks, labels = chromosome_labels)
+  # Add significance line
+  abline(h = -log10(1e-8), col = "red", lty = 2)
+}
+
+
 genetic_matrix <- read.csv("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/1_QC_GWAS/genetic_matrix.raw", sep="")
 colnames(genetic_matrix) <- clean_snp_ids(colnames(genetic_matrix))
 
@@ -195,3 +232,13 @@ colnames(snp_results_cov_df) <- c("Estimate", "Std. Error", "t value", "Pr(>|t|)
 
 # Save results to a file
 write.table(snp_results_cov_df, file = "snp_regression_results_with_covariate.txt", quote = FALSE, sep = "\t", row.names = TRUE)
+
+
+snp_results_df$SNP <- rownames(snp_results_df)
+# Merge results with bim_file for SNP information
+merged_results <- merge(snp_results_df, bim_file, by.x = "SNP", by.y = "SNP")
+
+# Calculate -log10(p-value) for plotting
+merged_results$logP <- -log10(merged_results$`Pr(>|t|)`)
+
+manhattan_plot(merged_results, "Manhattan Plot - Without Covariate")
