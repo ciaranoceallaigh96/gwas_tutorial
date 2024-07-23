@@ -148,3 +148,50 @@ dev.off()
 #These people fail due to heterozygotisity:
 #1330 "NA12342" 68049 67240 103571 0.02229 0.342972453679119 -3.66711854374478
 #1459 "NA12874" 68802 67560 104068 0.0339 0.338874582004074 -5.04839854982741
+
+
+# Select a single SNP for regression (e.g., the first SNP column)
+snp <- genetic_matrix[, 7]
+
+# Run linear regression without covariate
+single_snp_lm <- lm(PHENOTYPE ~ snp, data = genetic_matrix)
+summary(single_snp_lm)
+# Run linear regression with covariate
+single_snp_lm_cov <- lm(PHENOTYPE ~ snp + covariate, data = genetic_matrix)
+summary(single_snp_lm_cov)
+
+
+# Function to run linear regression for each SNP
+run_regression <- function(snp_column) {
+  snp <- genetic_matrix[, snp_column, with=FALSE]
+  model <- lm(genetic_matrix$PHENOTYPE ~ snp)
+  return(summary(model)$coefficients[2, ])  # Return the SNP coefficient summary
+}
+
+# Apply the function to each SNP column
+snp_results <- apply(genetic_matrix[, 7:ncol(genetic_matrix)], 2, run_regression)
+
+# Convert results to a data frame
+snp_results_df <- data.frame(t(snp_results))
+colnames(snp_results_df) <- c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
+
+# Save results to a file
+write.table(snp_results_df, file = "snp_regression_results.txt", quote = FALSE, sep = "\t", row.names = TRUE)
+
+
+# Function to run linear regression for each SNP with a covariate
+run_regression_with_covariate <- function(snp_column) {
+  snp <- genetic_matrix[, snp_column, with=FALSE]
+  model <- lm(genetic_matrix$PHENOTYPE ~ snp + genetic_matrix[, 2])
+  return(summary(model)$coefficients[2, ])  # Return the SNP coefficient summary
+}
+
+# Apply the function to each SNP column
+snp_results_cov <- apply(genetic_matrix[, 7:ncol(genetic_matrix)], 2, run_regression_with_covariate)
+
+# Convert results to a data frame
+snp_results_cov_df <- data.frame(t(snp_results_cov))
+colnames(snp_results_cov_df) <- c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
+
+# Save results to a file
+write.table(snp_results_cov_df, file = "snp_regression_results_with_covariate.txt", quote = FALSE, sep = "\t", row.names = TRUE)
