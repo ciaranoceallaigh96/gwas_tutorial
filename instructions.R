@@ -185,6 +185,8 @@ dev.off()
 #These people fail due to heterozygotisity:
 #1330 "NA12342" 68049 67240 103571 0.02229 0.342972453679119 -3.66711854374478
 #1459 "NA12874" 68802 67560 104068 0.0339 0.338874582004074 -5.04839854982741
+#delete this person due to relatedness
+#13291  NA07045
 
 
 # Select a single SNP for regression (e.g., the first SNP column)
