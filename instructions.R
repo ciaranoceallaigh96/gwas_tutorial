@@ -437,11 +437,11 @@ hist(maf_df$MAF, main = "MAF distribution", xlab = "MAF", ylab = "Frequency")
 dev.off()
 # Filter SNPs with MAF >= 0.05
 maf_threshold <- 0.05
+# Retain the first six columns and filter based on MAF
 genetic_matrix <- genetic_matrix[, c(1:6, which(maf_values >= maf_threshold) + 6)]
 
 # Print dimensions after filtering based on MAF
 print(dim(genetic_matrix))
-
 
 # Separate controls and cases
 controls <- genetic_matrix[genetic_matrix$Phenotype == 1, ]
@@ -458,19 +458,22 @@ controls_filtered <- cbind(controls[, 1:6], ctrl_snps[, filtered_snp_columns])
 cases_filtered <- cbind(cases[, 1:6], case_snps[, filtered_snp_columns])
 
 # Combine controls and cases data for the next step
-genetic_matrix <- rbind(
+genetic_matrix_filtered <- rbind(
   controls_filtered,
   cases_filtered
 )
 
-# Combine cases and controls for the final HWE check, excluding the first seven columns
-combined_snps <- genetic_matrix[, 7:ncol(genetic_matrix)]
+# Combine cases and controls for the final HWE check, excluding the first six columns
+combined_snps <- genetic_matrix_filtered[, 7:ncol(genetic_matrix_filtered)]
 
 # Calculate HWE p-values for each SNP in the combined dataset
 hwe_p_values_combined <- apply(combined_snps, 2, calculate_hwe)
 
 # Filter SNPs with HWE p-value >= 1e-10 in the combined dataset
-genetic_matrix <- cbind(genetic_matrix[, 1:6], combined_snps[, which(hwe_p_values_combined >= 1e-10)])
+genetic_matrix_final <- cbind(genetic_matrix_filtered[, 1:6], combined_snps[, which(hwe_p_values_combined >= 1e-10)])
+
+# Print dimensions after final filtering based on HWE
+print(dim(genetic_matrix_final))
 
 
            ############################################
