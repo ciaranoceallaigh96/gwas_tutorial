@@ -74,9 +74,6 @@ colnames(genetic_matrix) <- clean_snp_ids(colnames(genetic_matrix))
 bim_file <- read.delim("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/1_QC_GWAS/genetic_matrix.bim", header=FALSE)
 colnames(bim_file) <- c("CHR", "SNP", "CM", "BP", "A1", "A2")
 
-#Note need to fix the raw file and the bim file prior to the lab
-
-
 
 # Calculate missing genotype proportion per individual
 idv_missingness <- rowMeans(is.na(genetic_matrix))
@@ -448,4 +445,33 @@ hwe_p_values_combined <- apply(combined_snps, 2, calculate_hwe)
 
 # Filter SNPs with HWE p-value >= 1e-10 in the combined dataset
 genetic_matrix <- cbind(genetic_matrix[, 1:6], combined_snps[, which(hwe_p_values_combined >= 1e-10)])
+
+
+           ############################################
+           1000G
+           ####################################################
+# Read the .fam file
+global_fam_file <- read.table("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/2_Population_stratification/1000G_tutorial_data.fam", header=FALSE)
+colnames(fam_file) <- c("FID", "IID", "PAT", "MAT", "SEX", "PHENOTYPE")
+
+
+# Read the genetic matrix
+global_matrix <- read.csv("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/2_Population_stratification/1000G_tutorial_data.raw", sep="")
+colnames(global_matrix) <- clean_snp_ids(colnames(global_matrix))
+
+
+
+global_bim_file <- read.delim("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/2_Population_stratification/1000G_tutorial_data.bim", header=FALSE)
+colnames(global_bim_file) <- c("CHR", "SNP", "CM", "BP", "A1", "A2")
+
+# Calculate missing genotype proportion per individual
+idv_missingness <- rowMeans(is.na(global_matrix))
+
+# Calculate missing genotype proportion per SNP
+snp_missingness <- colMeans(is.na(global_matrix[, 7:ncol(global_matrix)])) # Exclude first 6 non-SNP columns
+
+# Data frames for visualization
+missing_individual_df <- data.frame(Individual = global_matrix$IID, Missing_Proportion = idv_missingness)
+missing_snp_df <- data.frame(SNP = colnames(global_matrix)[7:ncol(global_matrix)], Missing_Proportion = snp_missingness)
+
 
