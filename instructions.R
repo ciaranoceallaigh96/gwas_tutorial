@@ -574,3 +574,42 @@ print(dim(global_matrix))
 
 # No need for HWE check
 
+
+shared_columns <- intersect(colnames(genetic_matrix), colnames(global_matrix))
+
+# Subset both matrices to keep only the shared columns
+genetic_matrix_subset <- genetic_matrix[, shared_columns]
+global_matrix_subset <- global_matrix[, shared_columns]
+
+# Merge the matrices based on the shared columns
+merged_matrix <- merge(genetic_matrix_subset, global_matrix_subset, by = shared_columns, all = TRUE)
+
+# Print the dimensions of the merged matrix
+print(dim(merged_matrix))
+
+
+
+
+           #########################
+# Load the superpopulation file
+superpopulation <- read.table("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/2_Population_stratification/superpopulation_file.txt", header = TRUE)
+# Perform PCA on genetic_matrix (excluding the first six columns and the superpopulation column)
+snp_matrix <- as.matrix(merged_matrix[, 7:ncol(merged_matrix)])
+snp_matrix <- apply(snp_matrix, 2, replace_na_with_mean)
+pca_result <- prcomp(snp_matrix, center = TRUE, scale. = TRUE, rank. = 20)
+pca_scores <- as.data.frame(pca_result$x)
+pca_scores$IID <- merged_matrix$IID
+
+library(ggplot2)
+colors <- c("EUR" = "red", "AFR" = "blue", "ASN" = "green", "OWN" = "purple", "AMR" = "orange")
+#pca_scores$color <- ifelse(is.na(pca_scores$superpopulation), "black", colors[pca_scores$superpopulation])
+
+# Plot PCA results
+pdf("PCA_plot.pdf")
+ggplot(pca_scores, aes(x = PC1, y = PC2, color = superpopulation)) +
+  geom_point(size = 2) +
+  scale_color_manual(values = colors, na.translate = FALSE) +
+  labs(title = "PCA of Genetic Data", x = "PC1", y = "PC2") +
+  theme_minimal() +
+  theme(legend.title = element_blank())
+dev.off()
