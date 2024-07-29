@@ -177,10 +177,14 @@ hwe_p_values_combined <- apply(combined_snps, 2, calculate_hwe)
 # Filter SNPs with HWE p-value >= 1e-10 in the combined dataset
 genetic_matrix <- cbind(genetic_matrix[, 1:6], combined_snps[, which(hwe_p_values_combined >= 1e-10)])
 
+snp_matrix <- as.matrix(genetic_matrix)
+snp_matrix <- apply(snp_matrix, 2, replace_na_with_mean)
 
+# Perform PCA
+pca_result <- prcomp(snp_matrix, center = TRUE, scale. = TRUE, rank. = 20)
+pca_scores <- as.data.frame(pca_result$x)
+pca_scores$Individual <- genetic_matrix$Individual
 
-snp_matrix <- apply(genetic_matrix, 2, replace_na_with_mean)
-pca_result <- prcomp(snp_matrix, center = TRUE, scale. = TRUE, rank=20)
 pdf("PCA_plot.pdf")
 plot(pca_scores$PC1, pca_scores$PC2, xlab = "PC1", ylab = "PC2", main = "PCA of Genetic Data")
 dev.off()
