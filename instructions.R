@@ -349,11 +349,11 @@ colnames(bim_file) <- c("CHR", "SNP", "CM", "BP", "A1", "A2")
 idv_missingness <- rowMeans(is.na(genetic_matrix))
 
 # Calculate missing genotype proportion per SNP
-snp_missingness <- colMeans(is.na(genetic_matrix[, 8:ncol(genetic_matrix)])) # Exclude first 7 non-SNP columns
+snp_missingness <- colMeans(is.na(genetic_matrix[, 7:ncol(genetic_matrix)])) # Exclude first 6 non-SNP columns
 
 # Data frames for visualization
 missing_individual_df <- data.frame(Individual = genetic_matrix$IID, Missing_Proportion = idv_missingness)
-missing_snp_df <- data.frame(SNP = colnames(genetic_matrix)[8:ncol(genetic_matrix)], Missing_Proportion = snp_missingness)
+missing_snp_df <- data.frame(SNP = colnames(genetic_matrix)[7:ncol(genetic_matrix)], Missing_Proportion = snp_missingness)
 
 # Save histograms to PDFs
 pdf("histimiss.pdf")
@@ -368,8 +368,8 @@ dev.off()
 print(dim(genetic_matrix))
 
 # Delete SNPs with missingness >0.2
-snp_missingness <- colMeans(is.na(genetic_matrix[, 8:ncol(genetic_matrix)]))
-genetic_matrix <- genetic_matrix[, c(1:7, which(snp_missingness <= 0.2) + 7)]
+snp_missingness <- colMeans(is.na(genetic_matrix[, 7:ncol(genetic_matrix)]))
+genetic_matrix <- genetic_matrix[, c(1:6, which(snp_missingness <= 0.2) + 6)]
 print(dim(genetic_matrix))
            
 # Delete individuals with missingness >0.2
@@ -378,8 +378,8 @@ genetic_matrix <- genetic_matrix[idv_missingness <= 0.2, ]
 print(dim(genetic_matrix))
            
 # Delete SNPs with missingness >0.02
-snp_missingness <- colMeans(is.na(genetic_matrix[, 8:ncol(genetic_matrix)]))
-genetic_matrix <- genetic_matrix[, c(1:7, which(snp_missingness <= 0.02) + 7)]
+snp_missingness <- colMeans(is.na(genetic_matrix[, 7:ncol(genetic_matrix)]))
+genetic_matrix <- genetic_matrix[, c(1:6, which(snp_missingness <= 0.02) + 6)]
 print(dim(genetic_matrix))
            
 # Delete individuals with missingness >0.02
@@ -407,14 +407,14 @@ genetic_matrix <- cbind(first_six_columns, autosomal_snp_columns)
 
 
 # Calculate MAF for each SNP (excluding the first 7 columns)
-maf_values <- apply(genetic_matrix[, 8:ncol(genetic_matrix)], 2, calculate_maf)
-maf_df <- data.frame(SNP = colnames(genetic_matrix)[8:ncol(genetic_matrix)], MAF = maf_values)
+maf_values <- apply(genetic_matrix[, 7:ncol(genetic_matrix)], 2, calculate_maf)
+maf_df <- data.frame(SNP = colnames(genetic_matrix)[7:ncol(genetic_matrix)], MAF = maf_values)
 pdf("MAF_distribution.pdf")
 hist(maf_df$MAF, main = "MAF distribution", xlab = "MAF", ylab = "Frequency")
 dev.off()
 # Filter SNPs with MAF >= 0.05
 maf_threshold <- 0.05
-genetic_matrix <- genetic_matrix[, c(1:7, which(maf_values >= maf_threshold) + 7)]
+genetic_matrix <- genetic_matrix[, c(1:6, which(maf_values >= maf_threshold) + 6)]
 
 # Print dimensions after filtering based on MAF
 print(dim(genetic_matrix))
@@ -422,17 +422,17 @@ print(dim(genetic_matrix))
 
 # Separate controls and cases
 controls <- genetic_matrix[genetic_matrix$Phenotype == 1, ]
-ctrl_snps <- controls[, 8:ncol(controls)]
+ctrl_snps <- controls[, 7:ncol(controls)]
 cases <- genetic_matrix[genetic_matrix$Phenotype == 2, ]
-case_snps <- cases[, 8:ncol(cases)]
+case_snps <- cases[, 7:ncol(cases)]
 
 # Calculate HWE p-values for controls
 hwe_p_values_controls <- apply(ctrl_snps, 2, calculate_hwe)
 
 # Filter SNPs with HWE p-value >= 1e-6 in controls
 filtered_snp_columns <- which(hwe_p_values_controls >= 1e-6)
-controls_filtered <- cbind(controls[, 1:7], ctrl_snps[, filtered_snp_columns])
-cases_filtered <- cbind(cases[, 1:7], case_snps[, filtered_snp_columns])
+controls_filtered <- cbind(controls[, 1:6], ctrl_snps[, filtered_snp_columns])
+cases_filtered <- cbind(cases[, 1:6], case_snps[, filtered_snp_columns])
 
 # Combine controls and cases data for the next step
 filtered_genetic_matrix <- rbind(
@@ -441,11 +441,11 @@ filtered_genetic_matrix <- rbind(
 )
 
 # Combine cases and controls for the final HWE check, excluding the first seven columns
-combined_snps <- genetic_matrix[, 8:ncol(genetic_matrix)]
+combined_snps <- genetic_matrix[, 7:ncol(genetic_matrix)]
 
 # Calculate HWE p-values for each SNP in the combined dataset
 hwe_p_values_combined <- apply(combined_snps, 2, calculate_hwe)
 
 # Filter SNPs with HWE p-value >= 1e-10 in the combined dataset
-genetic_matrix <- cbind(genetic_matrix[, 1:7], combined_snps[, which(hwe_p_values_combined >= 1e-10)])
+genetic_matrix <- cbind(genetic_matrix[, 1:6], combined_snps[, which(hwe_p_values_combined >= 1e-10)])
 
