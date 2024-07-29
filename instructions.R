@@ -101,18 +101,23 @@ dev.off()
 print(dim(genetic_matrix))
 
 # Delete SNPs with missingness >0.2
-filtered_genetic_matrix <- genetic_matrix[, c(1:6, which(snp_missingness <= 0.2) + 6)]
+snp_missingness <- colMeans(is.na(genetic_matrix[, 7:ncol(genetic_matrix)])) 
+genetic_matrix <- genetic_matrix[, c(1:6, which(snp_missingness <= 0.2) + 6)]
+           
 # Delete individuals with missingness >0.2
-filtered_genetic_matrix <- filtered_genetic_matrix[idv_missingness <= 0.2, ]
+idv_missingness <- rowMeans(is.na(genetic_matrix))
+genetic_matrix <- genetic_matrix[idv_missingness <= 0.2, ]
+           
 # Delete SNPs with missingness >0.02
-snp_missingness <- colMeans(is.na(filtered_genetic_matrix[, 7:ncol(filtered_genetic_matrix)]))
-filtered_genetic_matrix <- filtered_genetic_matrix[, c(1:6, which(snp_missingness <= 0.02) + 6)]
+snp_missingness <- colMeans(is.na(genetic_matrix[, 7:ncol(genetic_matrix)]))
+genetic_matrix <- genetic_matrix[, c(1:6, which(snp_missingness <= 0.02) + 6)]
+           
 # Delete individuals with missingness >0.02
-idv_missingness <- rowMeans(is.na(filtered_genetic_matrix))
-filtered_genetic_matrix <- filtered_genetic_matrix[idv_missingness <= 0.02, ]
+idv_missingness <- rowMeans(is.na(genetic_matrix))
+genetic_matrix <- genetic_matrix[idv_missingness <= 0.02, ]
 
 # Print dimensions after filtering
-print(dim(filtered_genetic_matrix))
+print(dim(genetic_matrix))
 
 ###################################################################
 ### Step 2 ####
@@ -121,7 +126,7 @@ print(dim(filtered_genetic_matrix))
 
 # Select autosomal SNPs only
 autosomal_snps <- bim_file[bim_file$CHR >= 1 & bim_file$CHR <= 22, "SNP"]
-genetic_matrix <- filtered_genetic_matrix[, colnames(filtered_genetic_matrix) %in% autosomal_snps]
+genetic_matrix <- genetic_matrix[, colnames(genetic_matrix) %in% autosomal_snps]
 
 
 
@@ -142,9 +147,9 @@ print(dim(genetic_matrix))
 
 
 # Separate controls and cases
-controls <- genetic_matrix[filtered_genetic_matrix$PHENOTYPE == 1, ]
+controls <- genetic_matrix[genetic_matrix$PHENOTYPE == 1, ]
 ctrl_snps <- controls[, 7:ncol(controls)]
-cases <- genetic_matrix[filtered_genetic_matrix$PHENOTYPE == 2, ]
+cases <- genetic_matrix[genetic_matrix$PHENOTYPE == 2, ]
 case_snps <- cases[, 7:ncol(cases)]
 
 # Calculate HWE p-values for controls
@@ -162,17 +167,17 @@ filtered_genetic_matrix <- rbind(
 )
 
 # Combine cases and controls for the final HWE check, excluding the first six columns
-combined_snps <- filtered_genetic_matrix[, 7:ncol(filtered_genetic_matrix)]
+combined_snps <- genetic_matrix[, 7:ncol(genetic_matrix)]
 
 # Calculate HWE p-values for each SNP in the combined dataset
 hwe_p_values_combined <- apply(combined_snps, 2, calculate_hwe)
 
 # Filter SNPs with HWE p-value >= 1e-10 in the combined dataset
-filtered_genetic_matrix <- cbind(filtered_genetic_matrix[, 1:6], combined_snps[, which(hwe_p_values_combined >= 1e-10)])
+filtered_genetic_matrix <- cbind(genetic_matrix[, 1:6], combined_snps[, which(hwe_p_values_combined >= 1e-10)])
 
 
 
-snp_matrix <- apply(filtered_genetic_matrix, 2, replace_na_with_mean)
+snp_matrix <- apply(genetic_matrix, 2, replace_na_with_mean)
 pca_result <- prcomp(snp_matrix, center = TRUE, scale. = TRUE, rank=20)
 pdf("PCA_plot.pdf")
 plot(pca_scores$PC1, pca_scores$PC2, xlab = "PC1", ylab = "PC2", main = "PCA of Genetic Data")
