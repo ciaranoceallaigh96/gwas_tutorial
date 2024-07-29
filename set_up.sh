@@ -36,7 +36,9 @@ plink --extract subset_snps.txt --bfile 1kG_MDS --make-bed --out bad_snps
 plink --extract genetic_matrix.bim --bfile 1kG_MDS --make-bed --out good_snps
 plink --bmerge good_snps --bfile bad_snps --make-bed --out 1000G_tutorial_data
 
+mv 1000G_tutorial_data.log  1000G_tutorial_data.old.log
 
+plink --bfile 1000G_tutorial_data --recode A --out 1000G_tutorial_data
 
 #contents of idv_remove.txt (contains idvs failing due to heterozygotisity, relatedness and the non-founders)
 '''
