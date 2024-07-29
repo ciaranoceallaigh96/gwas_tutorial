@@ -16,6 +16,9 @@ mv genetic_matrix.log  genetic_matrix.old.log
 #generates genotype matrix which can be loaded into R
 plink --bfile genetic_matrix --recode A --out genetic_matrix
 
+#Add in ebough missingness for an individuals to remove
+sed -i 's/1458 NA12843 0 0 2 2 0 0 0 1 1 1 2 2 1 0 0 1 0 0 1 1 0 0/1458 NA12843 0 0 2 NA NA NA NA NA NA NA NA NA NA NA NA NA NA
+NA NA NA NA NA/g' genetic_matrix.raw
 
 
 
