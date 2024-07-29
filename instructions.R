@@ -508,3 +508,33 @@ print(dim(global_matrix))
 
 # Print dimensions after filtering
 print(dim(global_matrix))
+
+
+###################################################################
+### Step 2 ####
+
+# Select autosomal SNPs only
+autosomal_snps <- global_bim_file[global_bim_file$CHR >= 1 & global_bim_file$CHR <= 22, "SNP"]
+
+# Separate the first six columns
+first_six_columns <- global_matrix[, 1:6]
+
+# Select columns that match the autosomal SNPs, excluding the first six columns
+autosomal_snp_columns <- global_matrix[, (colnames(global_matrix) %in% autosomal_snps) & (seq_along(colnames(global_matrix)) > 6)]
+
+# Combine the first six columns with the selected SNP columns
+global_matrix <- cbind(first_six_columns, autosomal_snp_columns)
+
+
+# Calculate MAF for each SNP (excluding the first 7 columns)
+maf_values <- apply(global_matrix[, 7:ncol(global_matrix)], 2, calculate_maf)
+maf_df <- data.frame(SNP = colnames(global_matrix)[7:ncol(global_matrix)], MAF = maf_values)
+pdf("hapmap_MAF_distribution.pdf")
+hist(maf_df$MAF, main = "MAF distribution", xlab = "MAF", ylab = "Frequency")
+dev.off()
+# Filter SNPs with MAF >= 0.05
+maf_threshold <- 0.05
+global_matrix <- global_matrix[, c(1:6, which(maf_values >= maf_threshold) + 6)]
+
+# Print dimensions after filtering based on MAF
+print(dim(global_matrix))
