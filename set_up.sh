@@ -5,6 +5,8 @@ shuf --random-source=<(yes 42) indepSNP.prune.in | head -n 3000 > subset_indep_s
 sort -g -k 9,9 ../3_Association_GWAS/logistic_results.assoc_2.logistic | awk '{print $2}' | head -n 50 > subset_top_snps.txt
 diff HapMap_3_r3_3.bim HapMap_3_r3_4.bim | grep 'rs' | awk '{print $3}' | shuf --random-source=<(yes 42) | head -n 37 > subset_geno_0.02.txt
 diff HapMap_3_r3_8.bim HapMap_3_r3_7.bim | grep 'rs' | awk '{print $3}' | shuf --random-source=<(yes 42) | head -n 89 > subset_maf_0.05.txt
+awk '{if ($1 == 23) print}' HapMap_3_r3_2.bim | shuf --random-source=<(yes 42) | head -n 20 > subset_x.txt
+awk '{if ($1 == 25) print}' HapMap_3_r3_2.bim | shuf --random-source=<(yes 42) | head -n 2 > subset_y.txt
 
 cat subset_indep_snps.txt subset_top_snps.txt subset_geno_0.02.txt subset_maf_0.05.txt > subset_snps.txt
 
@@ -17,8 +19,7 @@ mv genetic_matrix.log  genetic_matrix.old.log
 plink --bfile genetic_matrix --recode A --out genetic_matrix
 
 #Add in ebough missingness for an individuals to remove
-sed -i 's/1458 NA12843 0 0 2 2 0 0 0 1 1 1 2 2 1 0 0 1 0 0 1 1 0 0/1458 NA12843 0 0 2 NA NA NA NA NA NA NA NA NA NA NA NA NA NA
-NA NA NA NA NA/g' genetic_matrix.raw
+sed -i 's/1458 NA12843 0 0 2 2 0 0 0 1 1 1 2 2 1 0 0 1 0 0 1 1 0 0/1458 NA12843 NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA/g' genetic_matrix.raw
 
 
 
