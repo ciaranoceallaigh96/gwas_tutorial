@@ -353,11 +353,11 @@ missing_individual_df <- data.frame(Individual = genetic_matrix$IID, Missing_Pro
 missing_snp_df <- data.frame(SNP = colnames(genetic_matrix)[7:ncol(genetic_matrix)], Missing_Proportion = snp_missingness)
 
 # Save histograms to PDFs
-pdf("histimiss.pdf")
+pdf("hapmap_histimiss.pdf")
 hist(missing_individual_df$Missing_Proportion, main="Histogram of Individual Missingness", xlab="Missing Proportion", ylab="Frequency")
 dev.off()
 
-pdf("histlmiss.pdf")
+pdf("hapmap_histlmiss.pdf")
 hist(missing_snp_df$Missing_Proportion, main="Histogram of SNP Missingness", xlab="Missing Proportion", ylab="Frequency")
 dev.off()
 
@@ -406,7 +406,7 @@ genetic_matrix <- cbind(first_six_columns, autosomal_snp_columns)
 # Calculate MAF for each SNP (excluding the first 7 columns)
 maf_values <- apply(genetic_matrix[, 7:ncol(genetic_matrix)], 2, calculate_maf)
 maf_df <- data.frame(SNP = colnames(genetic_matrix)[7:ncol(genetic_matrix)], MAF = maf_values)
-pdf("MAF_distribution.pdf")
+pdf("hapmap_MAF_distribution.pdf")
 hist(maf_df$MAF, main = "MAF distribution", xlab = "MAF", ylab = "Frequency")
 dev.off()
 # Filter SNPs with MAF >= 0.05
@@ -474,4 +474,37 @@ snp_missingness <- colMeans(is.na(global_matrix[, 7:ncol(global_matrix)])) # Exc
 missing_individual_df <- data.frame(Individual = global_matrix$IID, Missing_Proportion = idv_missingness)
 missing_snp_df <- data.frame(SNP = colnames(global_matrix)[7:ncol(global_matrix)], Missing_Proportion = snp_missingness)
 
+# Save histograms to PDFs
+pdf("hapmap_histimiss.pdf")
+hist(missing_individual_df$Missing_Proportion, main="Histogram of Individual Missingness", xlab="Missing Proportion", ylab="Frequency")
+dev.off()
 
+pdf("hapmap_histlmiss.pdf")
+hist(missing_snp_df$Missing_Proportion, main="Histogram of SNP Missingness", xlab="Missing Proportion", ylab="Frequency")
+dev.off()
+
+# Print dimensions before filtering
+print(dim(global_matrix))
+
+# Delete SNPs with missingness >0.2
+snp_missingness <- colMeans(is.na(global_matrix[, 7:ncol(global_matrix)]))
+global_matrix <- global_matrix[, c(1:6, which(snp_missingness <= 0.2) + 6)]
+print(dim(global_matrix))
+           
+# Delete individuals with missingness >0.2
+idv_missingness <- rowMeans(is.na(global_matrix))
+global_matrix <- global_matrix[idv_missingness <= 0.2, ]
+print(dim(global_matrix))
+           
+# Delete SNPs with missingness >0.02
+snp_missingness <- colMeans(is.na(global_matrix[, 7:ncol(global_matrix)]))
+global_matrix <- global_matrix[, c(1:6, which(snp_missingness <= 0.02) + 6)]
+print(dim(global_matrix))
+           
+# Delete individuals with missingness >0.02
+idv_missingness <- rowMeans(is.na(global_matrix))
+global_matrix <- global_matrix[idv_missingness <= 0.02, ]
+print(dim(global_matrix))
+
+# Print dimensions after filtering
+print(dim(global_matrix))
