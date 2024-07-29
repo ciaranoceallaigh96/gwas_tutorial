@@ -592,7 +592,6 @@ print(dim(merged_matrix))
 
            #########################
 # Load the superpopulation file
-superpopulation <- read.table("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/2_Population_stratification/superpopulation_file.txt", header = TRUE)
 # Perform PCA on genetic_matrix (excluding the first six columns and the superpopulation column)
 snp_matrix <- as.matrix(merged_matrix[, 7:ncol(merged_matrix)])
 snp_matrix <- apply(snp_matrix, 2, replace_na_with_mean)
@@ -601,12 +600,32 @@ pca_scores <- as.data.frame(pca_result$x)
 pca_scores$IID <- merged_matrix$IID
 
 library(ggplot2)
-colors <- c("EUR" = "red", "AFR" = "blue", "ASN" = "green", "OWN" = "purple", "AMR" = "orange")
-#pca_scores$color <- ifelse(is.na(pca_scores$superpopulation), "black", colors[pca_scores$superpopulation])
 
+'''
+superpopulation <- read.table("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/2_Population_stratification/superpopulation_file.txt", header = TRUE)           
+pca_scores <- merge(pca_scores, superpopulation, by = "IID", all.x = TRUE)
+
+colors <- c("EUR" = "red", "AFR" = "blue", "ASN" = "green", "OWN" = "purple", "AMR" = "orange")
 # Plot PCA results
 pdf("PCA_plot.pdf")
 ggplot(pca_scores, aes(x = PC1, y = PC2, color = superpopulation)) +
+  geom_point(size = 2) +
+  scale_color_manual(values = colors, na.translate = FALSE) +
+  labs(title = "PCA of Genetic Data", x = "PC1", y = "PC2") +
+  theme_minimal() +
+  theme(legend.title = element_blank())
+dev.off()
+'''
+
+colors <- c("ASW" = "red", "CEU" = "blue", "CHB" = "green", "OWN" = "purple", "CHS" = "orange", "FIN" = "black", "GBR" = "pink", "JPT" = "gray", "LWK" = "yellow", "MXL" = "brown", "PUR" = "aquamarine", "TSI" = "darkgreen", "YRI" = "deeppink")
+population <- read.table("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/2_Population_stratification/pop_file.txt", header = TRUE)
+pca_scores <- as.data.frame(pca_result$x)
+pca_scores$IID <- merged_matrix$IID
+pca_scores <- merge(pca_scores, population, by = "IID", all.x = TRUE)
+
+           
+pdf("PCA_pop_plot.pdf")
+ggplot(pca_scores, aes(x = PC1, y = PC2, color = population)) +
   geom_point(size = 2) +
   scale_color_manual(values = colors, na.translate = FALSE) +
   labs(title = "PCA of Genetic Data", x = "PC1", y = "PC2") +
