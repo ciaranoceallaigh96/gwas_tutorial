@@ -126,8 +126,6 @@ print(dim(genetic_matrix))
 ###################################################################
 ### Step 2 ####
 
-# Skip sex discrepancy check for now
-
 # Select autosomal SNPs only
 autosomal_snps <- bim_file[bim_file$CHR >= 1 & bim_file$CHR <= 22, "SNP"]
 genetic_matrix <- genetic_matrix[, colnames(genetic_matrix) %in% autosomal_snps]
