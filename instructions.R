@@ -570,32 +570,7 @@ global_matrix <- global_matrix[, c(1:6, which(maf_values >= maf_threshold) + 6)]
 # Print dimensions after filtering based on MAF
 print(dim(global_matrix))
 
+#No Need to Separate controls and cases
 
-           # Separate controls and cases
-controls <- global_matrix[global_matrix$Phenotype == 1, ]
-ctrl_snps <- controls[, 7:ncol(controls)]
-cases <- global_matrix[global_matrix$Phenotype == 2, ]
-case_snps <- cases[, 7:ncol(cases)]
+# No need for HWE check
 
-# Calculate HWE p-values for controls
-hwe_p_values_controls <- apply(ctrl_snps, 2, calculate_hwe)
-
-# Filter SNPs with HWE p-value >= 1e-6 in controls
-filtered_snp_columns <- which(hwe_p_values_controls >= 1e-6)
-controls_filtered <- cbind(controls[, 1:6], ctrl_snps[, filtered_snp_columns])
-cases_filtered <- cbind(cases[, 1:6], case_snps[, filtered_snp_columns])
-
-# Combine controls and cases data for the next step
-global_matrix <- rbind(
-  controls_filtered,
-  cases_filtered
-)
-
-# Combine cases and controls for the final HWE check, excluding the first seven columns
-combined_snps <- global_matrix[, 7:ncol(global_matrix)]
-
-# Calculate HWE p-values for each SNP in the combined dataset
-hwe_p_values_combined <- apply(combined_snps, 2, calculate_hwe)
-
-# Filter SNPs with HWE p-value >= 1e-10 in the combined dataset
-global_matrix <- cbind(global_matrix[, 1:6], combined_snps[, which(hwe_p_values_combined >= 1e-10)])
