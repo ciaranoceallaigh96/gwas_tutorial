@@ -8,7 +8,7 @@ diff HapMap_3_r3_8.bim HapMap_3_r3_7.bim | grep 'rs' | awk '{print $3}' | shuf -
 awk '{if ($1 == 23) print}' HapMap_3_r3_2.bim | shuf --random-source=<(yes 42) | head -n 20 > subset_x.txt
 awk '{if ($1 == 25) print}' HapMap_3_r3_2.bim | shuf --random-source=<(yes 42) | head -n 2 > subset_y.txt
 
-cat subset_indep_snps.txt subset_top_snps.txt subset_geno_0.02.txt subset_maf_0.05.txt > subset_snps.txt
+cat subset_indep_snps.txt subset_top_snps.txt subset_geno_0.02.txt subset_maf_0.05.txt subset_x.txt subset_y.txt > subset_snps.txt
 
 #Remove individuals not suitable for this tutorial and subset to smaller number of SNPs (make sure to include significant SNPs!)
 plink --extract subset_snps.txt --remove idv_remove.txt --bfile HapMap_3_r3_1 --make-bed --out genetic_matrix
@@ -21,11 +21,20 @@ plink --bfile genetic_matrix --recode A --out genetic_matrix
 #Add in ebough missingness for an individuals to remove
 sed -i 's/1458 NA12843 0 0 2 2 0 0 0 1 1 1 2 2 1 0 0 1 0 0 1 1 0 0/1458 NA12843 NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA/g' genetic_matrix.raw
 
+###############################################################################################
+###########################Prepare 1000G Data####################################################
+cp subset_indep_snps.txt ../2_Population_stratification
+cp genetic_matrix.bim ../2_Population_stratification
+cd ../2_Population_stratification
+diff 1kG_MDS2.bim 1kG_MDS3.bim | grep 'rs' | awk '{print $3}' | shuf --random-source=<(yes 42) | head -n 70 > subset_geno_0.02.txt
+diff 1kG_MDS4.bim 1kG_MDS5.bim | grep 'rs' | awk '{print $3}' | shuf --random-source=<(yes 42) | head -n 92 > subset_maf_0.05.txt
 
+cat subset_geno_0.02.txt subset_maf_0.05.txt > subset_snps.txt #note 1000G data is only chr1:22
 
-
-
-
+#Remove individuals not suitable for this tutorial and subset to smaller number of SNPs 
+plink --extract subset_snps.txt --bfile 1kG_MDS --make-bed --out bad_snps
+plink --extract genetic_matrix.bim --bfile 1kG_MDS --make-bed --out good_snps
+plink --bmerge good_snps --bfile bad_snps --make-bed --out 1000G_tutorial_data
 
 
 
