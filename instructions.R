@@ -175,7 +175,7 @@ combined_snps <- genetic_matrix[, 7:ncol(genetic_matrix)]
 hwe_p_values_combined <- apply(combined_snps, 2, calculate_hwe)
 
 # Filter SNPs with HWE p-value >= 1e-10 in the combined dataset
-filtered_genetic_matrix <- cbind(genetic_matrix[, 1:6], combined_snps[, which(hwe_p_values_combined >= 1e-10)])
+genetic_matrix <- cbind(genetic_matrix[, 1:6], combined_snps[, which(hwe_p_values_combined >= 1e-10)])
 
 
 
