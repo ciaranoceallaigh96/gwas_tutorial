@@ -103,18 +103,22 @@ print(dim(genetic_matrix))
 # Delete SNPs with missingness >0.2
 snp_missingness <- colMeans(is.na(genetic_matrix[, 7:ncol(genetic_matrix)])) 
 genetic_matrix <- genetic_matrix[, c(1:6, which(snp_missingness <= 0.2) + 6)]
+print(dim(genetic_matrix))
            
 # Delete individuals with missingness >0.2
 idv_missingness <- rowMeans(is.na(genetic_matrix))
 genetic_matrix <- genetic_matrix[idv_missingness <= 0.2, ]
+print(dim(genetic_matrix))
            
 # Delete SNPs with missingness >0.02
 snp_missingness <- colMeans(is.na(genetic_matrix[, 7:ncol(genetic_matrix)]))
 genetic_matrix <- genetic_matrix[, c(1:6, which(snp_missingness <= 0.02) + 6)]
+print(dim(genetic_matrix))
            
 # Delete individuals with missingness >0.02
 idv_missingness <- rowMeans(is.na(genetic_matrix))
 genetic_matrix <- genetic_matrix[idv_missingness <= 0.02, ]
+print(dim(genetic_matrix))
 
 # Print dimensions after filtering
 print(dim(genetic_matrix))
