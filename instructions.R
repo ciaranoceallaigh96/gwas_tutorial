@@ -32,42 +32,6 @@ replace_na_with_mean <- function(x) {
 }
 
 
-
-# Define a function to create a Manhattan plot
-manhattan_plot <- function(data, main_title) {
-  # Order data by chromosome and position
-  data <- data[order(data$CHR, data$BP), ]
-  
-  # Create a cumulative position for each SNP
-  data$cumulative_bp <- NA
-  current_chromosome <- 0
-  cumulative_bp <- 0
-  for (i in 1:nrow(data)) {
-    if (data$CHR[i] != current_chromosome) {
-      current_chromosome <- data$CHR[i]
-      cumulative_bp <- max(data$cumulative_bp, na.rm = TRUE)
-    }
-    data$cumulative_bp[i] <- cumulative_bp + data$BP[i]
-  }
-  
-  # Define colors for chromosomes
-  colors <- rep(c("blue", "red"), length.out = max(data$CHR))
-  
-  # Create plot
-  plot(data$cumulative_bp, data$logP, pch = 20, col = colors[data$CHR], 
-       xlab = "Chromosome", ylab = "-log10(p-value)", main = main_title)
-  
-  # Add chromosome labels
-  chromosome_labels <- unique(data$CHR)
-  chromosome_ticks <- sapply(chromosome_labels, function(chr) {
-    mean(data$cumulative_bp[data$CHR == chr])
-  })
-  axis(1, at = chromosome_ticks, labels = chromosome_labels)
-  # Add significance line
-  abline(h = -log10(1e-8), col = "red", lty = 2)
-}
-
-
 genetic_matrix <- read.csv("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/1_QC_GWAS/genetic_matrix.raw", sep="")
 colnames(genetic_matrix) <- clean_snp_ids(colnames(genetic_matrix))
 
@@ -352,7 +316,7 @@ manhattan_plot(merged_results, "Manhattan Plot - Without Covariate")
 
 
 # Load required libraries
-library(dplyr)
+library(qqman)
 
 # Read the .fam file
 fam_file <- read.table("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/1_QC_GWAS/genetic_matrix.fam", header=FALSE)
@@ -478,9 +442,9 @@ print(dim(genetic_matrix))
 
 
 
-           ############################################
-           1000G
-           ####################################################
+############################################
+#1000G
+####################################################
 # Read the .fam file
 global_fam_file <- read.table("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/2_Population_stratification/1000G_tutorial_data.fam", header=FALSE)
 colnames(fam_file) <- c("FID", "IID", "PAT", "MAT", "SEX", "PHENOTYPE")
@@ -590,7 +554,8 @@ print(dim(merged_matrix))
 
 
 
-           #########################
+
+#########################
 # Load the superpopulation file
 # Perform PCA on genetic_matrix (excluding the first six columns and the superpopulation column)
 snp_matrix <- as.matrix(merged_matrix[, 7:ncol(merged_matrix)])
@@ -601,22 +566,7 @@ pca_scores$IID <- merged_matrix$IID
 
 library(ggplot2)
 
-'''
-superpopulation <- read.table("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/2_Population_stratification/superpopulation_file.txt", header = TRUE)           
-pca_scores <- merge(pca_scores, superpopulation, by = "IID", all.x = TRUE)
-
-colors <- c("EUR" = "red", "AFR" = "blue", "ASN" = "green", "OWN" = "purple", "AMR" = "orange")
-# Plot PCA results
-pdf("PCA_plot.pdf")
-ggplot(pca_scores, aes(x = PC1, y = PC2, color = superpopulation)) +
-  geom_point(size = 2) +
-  scale_color_manual(values = colors, na.translate = FALSE) +
-  labs(title = "PCA of Genetic Data", x = "PC1", y = "PC2") +
-  theme_minimal() +
-  theme(legend.title = element_blank())
-dev.off()
-'''
-
+#information on the definitions of these populations can be found here -> https://www.coriell.org/1/NHGRI/Collections/1000-Genomes-Project-Collection/1000-Genomes-Project
 colors <- c("ASW" = "red", "CEU" = "blue", "CHB" = "green", "OWN" = "purple", "CHS" = "orange", "FIN" = "black", "GBR" = "pink", "JPT" = "gray", "LWK" = "yellow", "MXL" = "brown", "PUR" = "aquamarine", "TSI" = "darkgreen", "YRI" = "deeppink")
 population <- read.table("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/2_Population_stratification/pop_file.txt", header = TRUE)
 pca_scores <- as.data.frame(pca_result$x)
