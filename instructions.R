@@ -664,6 +664,6 @@ merged_data$BP <- as.numeric(merged_data$BP)
 merged_data$P <- as.numeric(merged_data$P)
 
 library(qqman)
-manhattan(merged_data, chr = "CHR", bp = "BP", p = "P", snp = "SNP", main = "Manhattan Plot", col = c("blue4", "orange3"))
+manhattan(merged_data, chr = "CHR", bp = "BP", p = "P", snp = "SNP", main = "Manhattan Plot", col = c("blue4", "orange3"))  #suggestiveline = -log10(1e-03
 
 
