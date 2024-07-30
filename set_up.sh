@@ -29,7 +29,7 @@ cd ../2_Population_stratification
 diff 1kG_MDS2.bim 1kG_MDS3.bim | grep 'rs' | awk '{print $3}' | shuf --random-source=<(yes 42) | head -n 70 > subset_geno_0.02.txt
 diff 1kG_MDS4.bim 1kG_MDS5.bim | grep 'rs' | awk '{print $3}' | shuf --random-source=<(yes 42) | head -n 92 > subset_maf_0.05.txt
 
-cat subset_geno_0.02.txt subset_maf_0.05.txt > subset_snps.txt #note 1000G data is only chr1:22
+cat subset_indep_snps.txt subset_geno_0.02.txt subset_maf_0.05.txt > subset_snps.txt #note 1000G data is only chr1:22
 
 #Remove individuals not suitable for this tutorial and subset to smaller number of SNPs 
 plink --extract subset_snps.txt --bfile 1kG_MDS --make-bed --out bad_snps
