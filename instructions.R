@@ -632,3 +632,38 @@ ggplot(pca_scores, aes(x = PC1, y = PC2, color = population)) +
   theme_minimal() +
   theme(legend.title = element_blank())
 dev.off()
+
+
+# Ensure genetic_matrix is a data frame
+genetic_matrix <- as.data.frame(genetic_matrix)
+
+run_regression <- function(snp_column) {
+    snp <- as.numeric(snp_column)
+    model <- lm(genetic_matrix$PHENOTYPE ~ snp)
+    return(summary(model)$coefficients[2, ])  # Return the SNP coefficient summary
+}
+
+# Apply the function over the specified columns
+snp_results <- lapply(genetic_matrix[, 7:ncol(genetic_matrix)], run_regression)
+
+# Optionally, convert the results to a matrix or data frame if needed
+snp_results_df <- do.call(rbind, snp_results)
+snp_results_df <- as.data.frame(snp_results_df)
+# Ensure the row names of snp_results_df match the SNP column in bim_file
+snp_results_df$SNP <- rownames(snp_results_df)
+
+# Merge the two data frames
+merged_data <- merge(snp_results_df, bim_file, by.x = "SNP", by.y = "SNP")
+
+# Rename columns to match qqman expectations
+colnames(merged_data) <- c("SNP", "Estimate", "Std.Error", "t.value", "P", "CHR", "CM", "BP", "A1", "A2")
+
+# Ensure CHR and BP are numeric
+merged_data$CHR <- as.numeric(merged_data$CHR)
+merged_data$BP <- as.numeric(merged_data$BP)
+merged_data$P <- as.numeric(merged_data$P)
+
+library(qqman)
+manhattan(merged_data, chr = "CHR", bp = "BP", p = "P", snp = "SNP", main = "Manhattan Plot", col = c("blue4", "orange3"))
+
+
