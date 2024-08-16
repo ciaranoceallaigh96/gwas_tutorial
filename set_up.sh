@@ -99,3 +99,10 @@ plink --bfile 1000G_tutorial_data --recode A --out 1000G_tutorial_data
 1463 NA12877
 1463 NA12878
 '''
+
+
+
+
+
+
+wget 'https://ftp.ncbi.nlm.nih.gov/hapmap/genotypes/hapmap3_r3/plink_format/hapmap3_r3_b36_fwd.qc.poly.tar.gz' #All HapMap Populations
