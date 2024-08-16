@@ -106,3 +106,4 @@ plink --bfile 1000G_tutorial_data --recode A --out 1000G_tutorial_data
 
 
 wget 'https://ftp.ncbi.nlm.nih.gov/hapmap/genotypes/hapmap3_r3/plink_format/hapmap3_r3_b36_fwd.qc.poly.tar.gz' #All HapMap Populations
+plink --file hapmap3_r2_b36_fwd.qc.poly/hapmap3_r3_b36_fwd.JPT.qc.poly --make-bed --out hapmap3_r3_b36_JPT
