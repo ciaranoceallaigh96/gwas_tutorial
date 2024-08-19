@@ -1,3 +1,15 @@
+######REMEMBER!!! #Clean allele names from ALL raw files!
+ colnames(raw) <- clean_snp_ids(colnames(raw))
+ write.table(raw, "hapmap3_MKK_subset.raw2", quote = FALSE, row.names=FALSE) 
+
+
+
+
+
+
+
+
+
 #Start with HapMap_3_r3_1 files from 1_QC_GWAS.zip.
 
 cd ~/GWA_tutorial/1_QC_GWAS/
