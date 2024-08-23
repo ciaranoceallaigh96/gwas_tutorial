@@ -25,6 +25,7 @@ missing_individual_df <- data.frame(Individual = 1:nrow(genetic_matrix), Missing
 - [ ] **Lab Task 1: How would you find the mean, maximum, and minimum missingness of the individuals in this dataset?**
 
 Let's take a look at the individuals with the most missingness by ordering the data:
+
 `head(missing_individual_df[order(-missing_individual_df$Missing_Proportion), ])`
 
 We can visualize the ammount of individuals missingness in our data using a histogram:
