@@ -22,4 +22,4 @@ We can now begin our QC. Let's first calculate the missing genotype proportion p
 idv_missingness <- rowMeans(is.na(genetic_matrix))
 missing_individual_df <- data.frame(Individual = 1:nrow(genetic_matrix), Missing_Proportion = idv_missingness)
 ```
-- [ ] Task 1: How would you view the IDs of the individuals with the most missingness?
+- [ ] **Task 1: How would you view the IDs of the individuals with the most missingness?**
