@@ -5,5 +5,7 @@ Today we will be performing the first part of two-part practical lab series on c
 
 We will first use data and X and you will be given further data at the end of this session with which to do your own analysis and upload a final lab report. Full instructions for this assignment will be available on Moodle. 
 
-`import numpy as np `  
+First, we will load our genetic_matrix. 
+
+`genetic_matrix <- read.csv("genetic_matrix.raw", sep="")` 
 
