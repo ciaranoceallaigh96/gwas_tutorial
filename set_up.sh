@@ -157,5 +157,6 @@ plink --bfile TSI_OWN --pca 2
 > new_phenotype <- rnorm(nrow(genotype_matrix), mean = 0, sd = 1)
 genetic_matrix$PHENO <- new_phenotype
 colnames(genetic_matrix) <- clean_snp_ids(colnames(genetic_matrix))
+genetic_matrix$PHENO <- ifelse(genetic_matrix$PHENO > mean(genetic_matrix$PHENO), 1, 0) #binary
 write.table(genetic_matrix, "TSI_OWN_RAW.raw2", quote = FALSE, row.names=FALSE) 
 ##
