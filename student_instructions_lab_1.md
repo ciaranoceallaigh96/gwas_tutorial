@@ -3,7 +3,9 @@
 
 Today we will be performing the first part of two-part practical lab series on conducting a genome-wide association study (GWAS). In this session we will be performing quality control (QC) on our input genotype data, followed by an investigation of population stratification using principal component analysis (PCA). 
 
-We will first use data and X and you will be given further data at the end of this session with which to do your own analysis and upload a final lab report. Full instructions for this assignment will be available on Moodle. 
+We will first use a tutorial dataset, and you will be given another dataset at the end of this session with which to do your own analysis and upload a final lab report. Full instructions for this assignment will be available on Moodle. All genotype information in these sessions are real, but for privacy purposes, the phenotypes are simulated. 
+
+Our tutorial dataset is a case/control cohort of X individuals of European ancestries genotyped at Y SNPs across the genome. We want to perform a GWAS on the binary disease phenotype and subsequently build a polygenic risk score (PRS) that we will test out on a Tuscan TSI test cohort (Toscani in Italia from the 1000 Genomes Project.)
 
 First we must define our functions that we will be using:
 
