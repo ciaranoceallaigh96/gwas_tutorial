@@ -22,7 +22,7 @@ We can now begin our QC. Let's first calculate the missing genotype proportion p
 idv_missingness <- rowMeans(is.na(genetic_matrix))
 missing_individual_df <- data.frame(Individual = 1:nrow(genetic_matrix), Missing_Proportion = idv_missingness)
 ```
-- [ ] **Task 1: How would you find the mean missingness of the individuals in this dataset?**
+- [ ] **Lab Task 1: How would you find the mean, maximum, and minimum missingness of the individuals in this dataset?**
 
 Let's take a look at the individuals with the most missingness by ordering the data:
 `head(missing_individual_df[order(-missing_individual_df$Missing_Proportion), ])`
@@ -36,7 +36,16 @@ hist(missing_individual_df$Missing_Proportion, main="Histogram of Individual Mis
 We should remove individuals with a missingness of more than 2%:
 
 ```
-dim(genetic_matrix)
 genetic_matrix <- genetic_matrix[idv_missingness <= 0.02,]
-dim(genetic_matrix)
 ```
+
+- [ ] **Lab Task 2: How many individuals were removed?**
+
+Let's do a similar QC step except this time in terms of SNPs. We want to calcuate the amount of missingness per SNP:
+
+```
+snp_missingness <- colMeans(is.na(genetic_matrix[, 7:ncol(genetic_matrix)]))
+missing_snp_df <- data.frame(SNP= colnames(genetic_matrix)[7:ncol(genetic_matrix)], Missing_Proportion = snp_missingness)
+````
+
+      
