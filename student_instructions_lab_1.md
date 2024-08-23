@@ -11,7 +11,6 @@ First, we will load our genetic_matrix:
 
 We should also load our BIM file which has the SNP information:
 
-`bim_file <- read.delim("genetic_matrix.bim", header=FALSE)`
-
-`colnames(bim_file) <- c("CHR", "SNP", "CM", "BP", "A1", "A2")`
+```bim_file <- read.delim("genetic_matrix.bim", header=FALSE)
+colnames(bim_file) <- c("CHR", "SNP", "CM", "BP", "A1", "A2")```
 
