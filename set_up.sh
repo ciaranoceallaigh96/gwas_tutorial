@@ -165,3 +165,6 @@ plink --bfile TSI_OWN --keep ../TSI_pop.txt --pheno ../TSI_OWN_RAW.pheno --make-
 plink --bfile TSI_OWN --keep ../OWN_pop.txt --pheno ../TSI_OWN_RAW.pheno --make-bed --out OWN_sim_pheno --1
 plink --bfile TSI_sim_pheno --recode A --out TSI_sim_pheno_raw
 plink --bfile OWN_sim_pheno --recode A --out OWN_sim_pheno_raw
+
+
+#need to now run the markdown
