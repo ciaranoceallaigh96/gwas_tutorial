@@ -160,3 +160,8 @@ colnames(genetic_matrix) <- clean_snp_ids(colnames(genetic_matrix))
 genetic_matrix$PHENO <- ifelse(genetic_matrix$PHENO > mean(genetic_matrix$PHENO), 1, 0) #binary
 write.table(genetic_matrix, "TSI_OWN_RAW.raw2", quote = FALSE, row.names=FALSE) 
 ##
+awk '{print $1, $2, $50009}' TSI_OWN_RAW.raw2  >  TSI_OWN_RAW.pheno
+plink --bfile TSI_OWN --keep ../TSI_pop.txt --pheno ../TSI_OWN_RAW.pheno --make-bed --out TSI_sim_pheno --1
+plink --bfile TSI_OWN --keep ../OWN_pop.txt --pheno ../TSI_OWN_RAW.pheno --make-bed --out OWN_sim_pheno --1
+plink --bfile TSI_sim_pheno --recode A --out TSI_sim_pheno_raw
+plink --bfile OWN_sim_pheno --recode A --out OWN_sim_pheno_raw
