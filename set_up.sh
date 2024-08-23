@@ -131,3 +131,31 @@ plink --bmerge TSI_MATRIX --bfile OWN_MATRIX --make-bed --out TSI_OWN
 plink --extract subset_indep_snps.txt --keep ../TSI_pop.txt --bfile ../2_Population_stratification/1kG_MDS --make-bed --out TSI_MATRIX --exclude TSI_OWN-merge.missnp
 plink --bmerge TSI_MATRIX --bfile OWN_MATRIX --make-bed --out TSI_OWN
 plink --bfile TSI_OWN --pca 2
+#
+> genetic_matrix <- read.table("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/1_QC_GWAS/TSI_OWN_RAW.raw", header=TRUE)
+> 
+> pcs <- read.table("//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/1_QC_GWAS/plink.eigenvec", header=FALSE)
+ genotype_matrix <- genetic_matrix[, 7:ncol(genetic_matrix)]
+> 
+> PC1 <- pcs$V3
+> PC2 <- pcs$V4
+> genetic_matrix$PC1 <- PC1
+> 
+> genetic_matrix$PC2 <- PC2
+> 
+> set.seed(123)  # For reproducibility
+> 
+> # Select 10 random SNPs as causal
+> causal_snps <- sample(colnames(genotype_matrix), 10)
+> 
+> # Simulate effect sizes from a normal distribution
+> effect_sizes <- rnorm(10, mean = 0, sd = 1)
+> 
+> # Assign effect sizes to the SNPs
+> names(effect_sizes) <- causal_snps
+> # Initialize the phenotype with a random component
+> new_phenotype <- rnorm(nrow(genotype_matrix), mean = 0, sd = 1)
+genetic_matrix$PHENO <- new_phenotype
+colnames(genetic_matrix) <- clean_snp_ids(colnames(genetic_matrix))
+write.table(raw, "TSI_OWN_RAW.raw2", quote = FALSE, row.names=FALSE) 
+##
