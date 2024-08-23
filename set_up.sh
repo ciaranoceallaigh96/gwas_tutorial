@@ -122,5 +122,12 @@ plink --file hapmap3_r2_b36_fwd.qc.poly/hapmap3_r3_b36_fwd.JPT.qc.poly --make-be
 
 plink --bfile hapmap3_r3_b36_JPT --extract hapmap3_r2_b36_fwd.qc.poly/HapMap_3_r3_1.snps --make-bed --out hapmap3_r2_b36_fwd.qc.poly/hapmap3_r3_b36_JPT_2  # https://www.broadinstitute.org/medical-and-population-genetics/hapmap-3
 
-
-library(PhenotypeSimulator)
+shuf --random-source=<(yes 42) indepSNP.prune.in | head -n 50000 > subset_indep_snps.txt
+grep 'OWN'  2_Population_stratification/pop_file.txt > OWN_pop.txt
+grep 'TSI'  2_Population_stratification/pop_file.txt > TSI_pop.txt
+plink --extract subset_indep_snps.txt --keep ../2_Population_stratification/OWN_pop.txt --bfile HapMap_3_r3_1 --make-bed --out OWN_MATRIX
+plink --extract subset_indep_snps.txt --keep ../TSI_pop.txt --bfile ../2_Population_stratification/1kG_MDS --make-bed --out TSI_MATRIX
+plink --bmerge TSI_MATRIX --bfile OWN_MATRIX --make-bed --out TSI_OWN
+plink --extract subset_indep_snps.txt --keep ../TSI_pop.txt --bfile ../2_Population_stratification/1kG_MDS --make-bed --out TSI_MATRIX --exclude TSI_OWN-merge.missnp
+plink --bmerge TSI_MATRIX --bfile OWN_MATRIX --make-bed --out TSI_OWN
+plink --bfile TSI_OWN --pca 2
