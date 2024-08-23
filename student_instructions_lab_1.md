@@ -125,5 +125,5 @@ genetic_matrix <- genetic_matrix[, c(1:6, which(maf_values >= 0.05) + 6)]
 
 We need to exclude any SNPs that are completely out of Hardy-Weinberg Equilibrium (HWE), as measured by a Chi-squared test. If a SNP is out of equilibrium it could suggest a genotyping error – however for disease cases we should have a less stringent threshold as it possible selection against the disease allele could lead to deviances from HWE. 
 
-- [ ] **Lab Task 3: Create two new objects from genotype_matrix, one for cases and one for controls (Answer: You should have X cases and Y controls.)**
+- [ ] **Lab Task 4: Create two new objects from genotype_matrix, one for cases and one for controls (Answer: You should have X cases and Y controls.)**
 
