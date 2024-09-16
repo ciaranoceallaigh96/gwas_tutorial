@@ -160,5 +160,5 @@ genetic_matrix_7 <- genetic_matrix_6[, c(1:6, which(hwe_p_values_all >= 1e-10) +
 Before, we move onto the princicpal component analysis. Let us take a look at how many SNPs and Individuals were removed during our QC processes. 
 
 - [ ] **Lab Task 5: Calculate how many SNPs and Individuals were removed across all QC steps (Answer:))**
-# dim(genetic_matrix_1) - dim(genetic_matrix_7)
+#dim(genetic_matrix_1) - dim(genetic_matrix_7)
 
