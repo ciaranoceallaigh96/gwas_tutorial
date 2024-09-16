@@ -67,13 +67,13 @@ check_and_install_packages(required_packages)
 
 We will now load our genetic_matrix: 
 
-`genetic_matrix_1 <- read.table("genetic_matrix.raw", header=TRUE)` #REMINDER SNP IDS NEED TO BE CLEANED!
+`genetic_matrix_1 <- read.table("genetic_matrix_cleaned.raw", header=TRUE)` #REMINDER SNP IDS NEED TO BE CLEANED!
 
 Let's take a look at the dataset. 
 
 ```
-dim(genetic_matrix)
-genetic_matrix[1:5,1:10] #Taking a peak
+dim(genetic_matrix_1)
+genetic_matrix_1[1:5,1:10] #Taking a peak
 ```
 
 We should also load our BIM file which has the SNP information:
@@ -87,8 +87,8 @@ head(bim_file)
 We can now begin our QC. Let's first calculate the missing genotype proportion per individual:
 
 ```
-idv_missingness <- rowMeans(is.na(genetic_matrix))
-missing_individual_df <- data.frame(IID = genetic_matrix$IID, Missing_Proportion = idv_missingness)
+idv_missingness <- rowMeans(is.na(genetic_matrix_1))
+missing_individual_df <- data.frame(IID = genetic_matrix_1$IID, Missing_Proportion = idv_missingness)
 ```
 #mean(idv_missingness) or mean(missing_individual_df$Missing_Proportion)
 - [ ] **Lab Task 1: Calculate the mean missingness of the individuals in this dataset (Answer: 0.19%)**
@@ -106,7 +106,7 @@ hist(missing_individual_df$Missing_Proportion, main="Histogram of Individual Mis
 We should remove individuals with a missingness of more than 1%:
 
 ```
-genetic_matrix_2 <- genetic_matrix[idv_missingness <= 0.01,]
+genetic_matrix_2 <- genetic_matrix_1[idv_missingness <= 0.01,]
 ```
 
 - [ ] **Lab Task 2: Calculate how many individuals were removed? (Answer: 3)**
