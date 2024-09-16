@@ -191,16 +191,65 @@ It looks like we have two outliers on the PC1 axis. We possibly have three more 
 pc1_outlier_threshold <- mean(pca_scores$PC1) + 6 * sd(pca_scores$PC1)
 pc1_outliers <- which(pca_scores$PC1>pc1_outlier_threshold)
 pca_scores[pc1_outliers,]
-pca_scores2 <- pca_scores[-pc1_outliers,]
+genetic_matrix_8 <- genetic_matrix_7[-pc1_outliers,]
 ```
 
 - [ ] **Lab Task 6: Remove all outliers on the PC2 axis (Answer: There are no PC2 outliers according to the above defintion.))**
 #pc2_outlier_threshold <- mean(pca_scores$PC2) + 6 * sd(pca_scores$PC2)
 #pc2_outliers <- which(pca_scores$PC2>pc2_outlier_threshold)
 #pca_scores[pc2_outliers,]
-#pca_scores3 <- pca_scores2[-pc2_outliers,]
 
 
 
+Let us see where these samples fall on a global sample by using labelled data from the 1000 Genomes project. QC has already been done on this data. Before merging, we must be sure to make sure the two matrices share the same SNPs.
 
+```
+global_matrix <- read.table("lab_1_1000G_cleaned.raw", header=TRUE)
+dim(global_matrix)
+shared_columns <- intersect(colnames(genetic_matrix_8), colnames(global_matrix))
+```
 
+We will subset both matrices to keep only the shared columns. Then we will merge them together. 
+
+```
+genetic_matrix_8_subset <- genetic_matrix_8[, shared_columns]
+global_matrix <- global_matrix[, shared_columns]
+merged_matrix <- merge(genetic_matrix_8_subset, global_matrix, by = shared_columns, all = TRUE)
+dim(merged_matrix)
+```
+
+Let us also load in the population codes of the individuals of the 1000 Genomes project. 
+
+```
+population_codes <- read.table("population_file_lab_1.txt", header=TRUE)
+head(population_codes)
+```
+
+Let’s redo our PCA with the merged matrix. We will calculate the first two PCS. We will then add back in the population info to each sample. Our own sample will remain NA so we will label it "my_sample". 
+
+```
+merged_snp_matrix <- as.matrix(merged_matrix[, 7:ncol(merged_matrix)])
+merged_snp_matrix_2 <- apply(merged_snp_matrix, 2, replace_na_with_mean)
+merged_pca_result <- prcomp(merged_snp_matrix_2, center = TRUE, scale. = TRUE, rank. = 2)
+merged_pca_scores <- as.data.frame(merged_pca_result$x)
+merged_pca_scores$IID <- merged_matrix$IID
+
+merged_pca_scores <- merge(merged_pca_scores, population_codes, by = "IID", all.x = TRUE)
+head(merged_pca_scores)
+merged_pca_scores[is.na(merged_pca_scores)] <- "my_sample"
+```
+
+Let us now plot out our PCs from the 1000 G samples. They’ve give been given broad superpopulation labels: “AFR=African”, “EUR=European”, “ASN=Asian”,  “AMR=Admixed American”
+
+```
+colours <- c("EUR" = "red", "ASN" = "blue", "AFR" = "green", "AMR" = "purple", "my_sample" = "orange")
+
+ggplot(merged_pca_scores, aes(x=PC1, y=PC2, color=population)) +
+geom_point(size=2) +
+scale_colour_manual(values=colours, na.translate=FALSE) +
+labs(title="PCA of Genetic Data", x="PC1", y="PC2") +
+theme_minimal() +
+theme(legend.title=element_blank())
+```
+
+- [ ] **Lab Task 7: Do the samples fall broadly where we expect them to in PCA-space? (Answer: Yes. These European samples fall within the European-associated cluster))**
