@@ -174,3 +174,4 @@ We won’t need anything other than the SNP columns for PCA. For simplicity, we 
 
 Now let us perform the PCA using the prcomp function. 
 
+
