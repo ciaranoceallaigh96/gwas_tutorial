@@ -253,3 +253,8 @@ theme(legend.title=element_blank())
 ```
 
 - [ ] **Lab Task 7: Do the samples fall broadly where we expect them to in PCA-space? (Answer: Yes. These European samples fall within the European-associated cluster))**
+
+
+# GWAS Labs Y3 Advanced Genetics & Cell Biology
+## Lab 2 - GWAS and PRS
+Today we will be performing the second part of two-part practical lab series on conducting a genome-wide association study (GWAS). 
