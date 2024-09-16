@@ -172,6 +172,35 @@ We won’t need anything other than the SNP columns for PCA. For simplicity, we 
 
 `snp_matrix <- apply(genetic_matrix_7[,7:ncol(genetic_matrix_7)], 2, replace_na_with_mean)`
 
-Now let us perform the PCA using the prcomp function. 
+Now let us perform the PCA using the prcomp function. We will calculate the first 5 principal components. 
 
-Some Markdown text with <span style="color:blue">some *blue* text</span>.
+```
+pca_result <- prcomp(snp_matrix, center=TRUE, scale.=TRUE,rank.=5)
+pca_scores <- as.data.frame(pca_result$x)
+pca_scores$IID <- genetic_matrix_7$IID
+head(pca_scores)
+```
+
+Now we can plot the first two principcal components of variation. 
+
+`plot(pca_scores$PC1, pca_scores$PC2, xlab="PC1", ylab="PC2", main="PCA of Genetic Data")`
+
+It looks like we have two outliers on the PC1 axis. We possibly have three more outliers on the PC2 axis. There are multiple ways to define an outlier - one of which is any point that falls more than six standard deviations from the mean PC value. We will use this to define and remove our outliers here. 
+
+```
+pc1_outlier_threshold <- mean(pca_scores$PC1) + 6 * sd(pca_scores$PC1)
+pc1_outliers <- which(pca_scores$PC1>pc1_outlier_threshold)
+pca_scores[pc1_outliers,]
+pca_scores2 <- pca_scores[-pc1_outliers,]
+```
+
+- [ ] **Lab Task 6: Remove all outliers on the PC2 axis (Answer: There are no PC2 outliers according to the above defintion.))**
+#pc2_outlier_threshold <- mean(pca_scores$PC2) + 6 * sd(pca_scores$PC2)
+#pc2_outliers <- which(pca_scores$PC2>pc2_outlier_threshold)
+#pca_scores[pc2_outliers,]
+#pca_scores3 <- pca_scores2[-pc2_outliers,]
+
+
+
+
+
