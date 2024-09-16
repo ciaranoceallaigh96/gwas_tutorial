@@ -125,6 +125,7 @@ We've now done two important QC steps. The next step will be to select only the 
 
 ```
 autosomal_snps <- bim_file[bim_file$CHR >= 1 & bim_file$CHR <= 22, "SNP"]
+autosomal_snps <- c(colnames(genetic_matrix_3)[1:6], autosomal_snps) #add the first six columns as well
 genetic_matrix_4 <- genetic_matrix_3[, colnames(genetic_matrix_3) %in% autosomal_snps]
 ```  
 
@@ -139,8 +140,9 @@ genetic_matrix_5 <- genetic_matrix_4[, c(1:6, which(maf_values >= 0.05) + 6)]
 
 We need to exclude any SNPs that are completely out of Hardy-Weinberg Equilibrium (HWE), as measured by a Chi-squared test. If a SNP is out of equilibrium it could suggest a genotyping error – however for disease cases we should have a less stringent threshold as it possible selection against the disease allele could lead to deviances from HWE. 
 
-- [ ] **Lab Task 4: Create two new objects from genotype_matrix, one for cases and one for controls (Answer: You should have X cases and Y controls.)**
-
+- [ ] **Lab Task 4: Create two new objects from genotype_matrix, one for cases and one for controls (Answer: You should have 53 cases and 53 controls.)**
+#controls <- genetic_matrix_5[genetic_matrix_5$PHENOTYPE == 1, ]
+#cases <- genetic_matrix_5[genetic_matrix_5$PHENOTYPE == 2, ]
 Let’s apply a stringent p-value threshold (1e-6) for the control SNPs as we should expect them all to be roughly in HWE.
 
 ```
@@ -152,10 +154,11 @@ Let’s now apply a less stringent p-value threshold for cases and controls toge
 
 ```
 hwe_p_values_all <- apply(genetic_matrix_6[, 7:ncol(genetic_matrix_6)], 2, calculate_hwe)
-genetic_matrix_7 <- genetic_matrix_7[, c(1:6, which(hwe_p_values_all >= 1e-10) + 6)]
-#####SHOW HOW MANY
+genetic_matrix_7 <- genetic_matrix_6[, c(1:6, which(hwe_p_values_all >= 1e-10) + 6)]
 ```
 
+Before, we move onto the princicpal component analysis. Let us take a look at how many SNPs and Individuals were removed during our QC processes. 
 
-
+- [ ] **Lab Task 5: Calculate how many SNPs and Individuals were removed across all QC steps (Answer:))**
+# dim(genetic_matrix_1) - dim(genetic_matrix_7)
 
