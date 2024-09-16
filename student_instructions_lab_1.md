@@ -159,6 +159,18 @@ genetic_matrix_7 <- genetic_matrix_6[, c(1:6, which(hwe_p_values_all >= 1e-10) +
 
 Before, we move onto the princicpal component analysis. Let us take a look at how many SNPs and Individuals were removed during our QC processes. 
 
-- [ ] **Lab Task 5: Calculate how many SNPs and Individuals were removed across all QC steps (Answer:))**
+- [ ] **Lab Task 5: Calculate how many SNPs and Individuals were removed across all QC steps (Answer: 3 individuals and 509 SNPs removed))**
 #dim(genetic_matrix_1) - dim(genetic_matrix_7)
+
+We now need to perform PCA on our genotype matrix. This transformation will find the vectors (PCs) that explain the most variation across the entire matrix. 
+
+The first few PCs tend to capture broad ancestry patterns in the data. 
+
+We use PCA to detect genetic outliers, to ensure our sample is genetically homogenous (as a proxy for environmental homogeneity), and to then use as covariates in our GWAS regression (to further account for any environmental effects). 
+
+We won’t need anything other than the SNP columns for PCA. For simplicity, we will also replace any NA genotype values with the mean value of the corresponsing value. 
+
+`snp_matrix <- apply(genetic_matrix_7[,7:ncol(genetic_matrix_7)], 2, replace_na_with_mean)`
+
+Now let us perform the PCA using the prcomp function. 
 
