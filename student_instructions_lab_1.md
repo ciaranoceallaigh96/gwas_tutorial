@@ -357,7 +357,7 @@ Let’s build a polygenic risk score. The PRS is simply a weighted sum. For each
 
 ```
 snps_to_include <- summary_stats[summary_stats$PValue < 0.001, ]
-prs <- data.frame(SCORE=numeric(nrow(genetic_matrix_8), IID=character(nrow(genetic_matrix_8)), stringsAsFactors=FALSE)
+prs <- data.frame(SCORE=numeric(nrow(genetic_matrix_8)), IID=character(nrow(genetic_matrix_8)), stringsAsFactors=FALSE)
 
 #Loop through all individuals
 for (i in 1:nrow(genetic_matrix_8)) {
