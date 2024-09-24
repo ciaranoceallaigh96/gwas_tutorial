@@ -92,15 +92,18 @@ head(pca_scores)
 
 plot(pca_scores$PC1, pca_scores$PC2, xlab="PC1", ylab="PC2", main="PCA of Genetic Data")
 
-pc1_outlier_threshold <- mean(pca_scores$PC1) + 6 * sd(pca_scores$PC1)
-pc1_outliers <- which(pca_scores$PC1>pc1_outlier_threshold)
+pc1_upper_threshold <- mean(pca_scores$PC1) + 6 * sd(pca_scores$PC1)
+pc1_lower_threshold <- mean(pca_scores$PC1) - 6 * sd(pca_scores$PC1)
+
+pc1_outliers <- which(pca_scores$PC1 > pc1_upper_threshold | pca_scores$PC1 < pc1_lower_threshold)
 pca_scores[pc1_outliers,]
 genetic_matrix_8 <- genetic_matrix_7[-pc1_outliers,]
 
-pc2_outlier_threshold <- mean(pca_scores$PC2) + 6 * sd(pca_scores$PC2)
-pc2_outliers <- which(pca_scores$PC2>pc2_outlier_threshold)
+pc2_upper_threshold <- mean(pca_scores$PC2) + 6 * sd(pca_scores$PC2)
+pc2_lower_threshold <- mean(pca_scores$PC2) - 6 * sd(pca_scores$PC2)
+pc2_outliers <- which(pca_scores$PC2 > pc2_upper_threshold | pca_scores$PC2 < pc2_lower_threshold)
 
-global_matrix <- read.table("lab_1_1000G_cleaned.raw", header=TRUE)
+global_matrix <- read.table("../lab_1_1000G_cleaned.raw", header=TRUE)
 dim(global_matrix)
 shared_columns <- intersect(colnames(genetic_matrix_8), colnames(global_matrix))
 
@@ -109,7 +112,7 @@ global_matrix <- global_matrix[, shared_columns]
 merged_matrix <- merge(genetic_matrix_8_subset, global_matrix, by = shared_columns, all = TRUE)
 dim(merged_matrix)
 
-population_codes <- read.table("population_file_lab_1.txt", header=TRUE)
+population_codes <- read.table("../population_file_lab_1.txt", header=TRUE)
 head(population_codes)
 
 merged_snp_matrix <- as.matrix(merged_matrix[, 7:ncol(merged_matrix)])
