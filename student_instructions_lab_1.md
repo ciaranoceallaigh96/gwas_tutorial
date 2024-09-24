@@ -188,16 +188,18 @@ Now we can plot the first two principcal components of variation.
 It looks like we have two outliers on the PC1 axis. We possibly have three more outliers on the PC2 axis. There are multiple ways to define an outlier - one of which is any point that falls more than six standard deviations from the mean PC value. We will use this to define and remove our outliers here. 
 
 ```
-pc1_outlier_threshold <- mean(pca_scores$PC1) + 6 * sd(pca_scores$PC1)
-pc1_outliers <- which(pca_scores$PC1>pc1_outlier_threshold)
+pc1_upper_threshold <- mean(pca_scores$PC1) + 6 * sd(pca_scores$PC1)
+pc1_lower_threshold <- mean(pca_scores$PC1) - 6 * sd(pca_scores$PC1)
+
+pc1_outliers <- which(pca_scores$PC1 > pc1_upper_threshold | pca_scores$PC1 < pc1_lower_threshold)
 pca_scores[pc1_outliers,]
 genetic_matrix_8 <- genetic_matrix_7[-pc1_outliers,]
 ```
 
 - [ ] **Lab Task 6: Remove all outliers on the PC2 axis (Answer: There are no PC2 outliers according to the above defintion.))**
-#pc2_outlier_threshold <- mean(pca_scores$PC2) + 6 * sd(pca_scores$PC2)
-#pc2_outliers <- which(pca_scores$PC2>pc2_outlier_threshold)
-#pca_scores[pc2_outliers,]
+#pc2_upper_threshold <- mean(pca_scores$PC2) + 6 * sd(pca_scores$PC2)
+#pc2_lower_threshold <- mean(pca_scores$PC2) - 6 * sd(pca_scores$PC2)
+#pc2_outliers <- which(pca_scores$PC2 > pc2_upper_threshold | pca_scores$PC2 < pc2_lower_threshold)
 
 
 
