@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/51315baf-c6ed-4312-aa50-becc263a34f8)![image](https://github.com/user-attachments/assets/03c4d7c0-9083-49d6-a053-c3d4bdd2dd3e)![image](https://github.com/user-attachments/assets/05940d37-eb0c-4160-8209-e596669b9d11)# GWAS Labs Y3 Advanced Genetics & Cell Biology
+![image](https://github.com/user-attachments/assets/40beeee7-5f64-4684-be27-9bdbebe3122a)![image](https://github.com/user-attachments/assets/99941515-122f-46c3-bdf9-a85f4d810156)![image](https://github.com/user-attachments/assets/5fb51f04-c44f-40a0-a701-d7535f5edff0)![image](https://github.com/user-attachments/assets/51315baf-c6ed-4312-aa50-becc263a34f8)![image](https://github.com/user-attachments/assets/03c4d7c0-9083-49d6-a053-c3d4bdd2dd3e)![image](https://github.com/user-attachments/assets/05940d37-eb0c-4160-8209-e596669b9d11)# GWAS Labs Y3 Advanced Genetics & Cell Biology
 ## Lab 1 - Data QC and Population Stratification
 
 Today we will be performing the first part of two-part practical lab series on conducting a genome-wide association study (GWAS). In this session we will be performing quality control (QC) on our input genotype matrix, followed by an investigation of population stratification using principal component analysis (PCA). 
@@ -313,4 +313,85 @@ Now we can loop through all the other SNPs and sort the summary statistics by th
 single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_9[[list_of_snps[i]]] + PC1 + PC2, data = genetic_matrix_9, family="binomial")
 summary_stats[list_of_snps[i], "EffectSize"] <- coef(summary(single_snp_glm))[,1][2]
 summary_stats[list_of_snps[i], "PValue"] <- coef(summary(single_snp_glm))[,4][2]
-}`
+}
+summary_stats$SNP <- rownames(summary_stats)
+`
+
+Let's look at our top SNPs
+
+head(summary_stats[order(summary_stats$PValue), ])
+
+A negative effect size ( log(OR) ) means the allele is a protective allele rather than a risk allele. 
+
+```
+alpha <- 0.05
+number_of_tests <- length(list_of_snps)
+```
+
+- [ ] **Lab Task 2: Perform a bonferonni adjust on our alpha value and create the bonf_alpha variable (Answer: bonf_alpha <- alpha / number_of_tests)**
+
+
+Now, filter all SNPs with p-value below this threshold
+significant_snps <- summary_stats[summary_stats$PValue < bonf_alpha, ]
+significant_snps
+```
+
+Let’s make a Manhattan plot. We first need to refer to our bim file to get the genomic location of each SNP. We can update our summary stats to also include the chromosomal location of each SNP. 
+
+```
+head(bim_file)
+summary_stats_with_loc <- merge(summary_stats, bim_file, by.x = "SNP", by.y = "SNP")
+head(summary_stats_with_loc)
+```
+
+`manhattan(summary_stats_with_loc, chr="CHR", bp="BP", p="PValue", snp="SNP", main="Manhattan Plot", col=c("blue4", "orange3"), genomewideline=-log10(bonf_alpha), ylim=c(0, -log10(bonf_alpha)+1), cex.axis=0.4, suggestiveline=FALSE)`
+
+
+We can also zoom in/
+
+`manhattan(subset(summary_stats_with_loc, CHR == 3), chr="CHR", bp="BP", p="PValue", snp="SNP", xlim=c(7000000,9000000), genomewideline=-log10(bonf_alpha), annotatePval = bonf_alpha, annotateTop=FALSE)`
+
+Let’s build a polygenic risk score. The PRS is simply a weighted sum. For each individual we will sum the effect (as estimated by the GWAS) of each SNP, depending on whether or not they have 0, 1, or 2 copies of the risk allele. 
+
+```
+snps_to_include <- summary_stats[summary_stats$PValue < 0.001, ]
+prs <- data.frame(SCORE=numeric(nrow(genetic_matrix_8), IID=character(nrow(genetic_matrix_8)), stringsAsFactors=FALSE)
+
+#Loop through all individuals
+for (i in 1:nrow(genetic_matrix_8)) {
+snp_values <- genetic_matrix_8[i, 7:ncol(genetic_matrix_8)]
+match_indices <- match(names(genetic_matrix_8)[7:ncol(genetic_matrix_8)], snps_to_include$SNP)
+effect_sizes <- snps_to_include$EffectSize[match_indices]
+prs$SCORE[i] <- sum(effect_sizes * snp_values, na.rm = TRUE)
+prs$IID[i] <- genetic_matrix_8$IID[i]
+}
+```
+- [ ] **Lab Task 3: What is the mean and standard deviation of the PRS? (Answer: mean(prs$SCORE) and sd(prs$SCORE))**
+
+We can add our PRS results back on our genotype matrix object.
+
+```
+genetic_matrix_10 <- merge(genetic_matrix_9, prs, by.x="IID", by.y ="IID")
+```
+
+ggplot(genetic_matrix_10, aes(x = SCORE, fill = as.factor(PHENOTYPE))) +
+  geom_density(alpha = 0.5) +
+  labs(
+    title = "Distribution of PRS by Case (1) and Control (0) Status",
+    x = "PRS",
+    y = "Density",
+    fill = "Phenotype"
+  ) +
+  theme_minimal()
+
+prs_model <- glm(PHENOTYPE ~ SCORE, data = genetic_matrix_10, family=binomial)
+
+
+How can we measure the success of a PRS? One metric is called R^2 (coefficient of determination) which ranges between 0 and 1, and can be interpreted as the amount of variation being explained by the model. For binary traits, we use a modified R^2 called Nagelkerke’s R^2 
+
+```
+result <- nagelkerke(prs_model)
+result$Pseudo.R.squared.for.model.vs.null[3]
+```
+
+- [ ] **Lab Task 4: What percentage of the overall phenotypic variation is being explained by the PRS model? (Answer:))**
