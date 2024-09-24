@@ -1,4 +1,4 @@
-# GWAS Labs Y3 Advanced Genetics & Cell Biology
+![image](https://github.com/user-attachments/assets/51315baf-c6ed-4312-aa50-becc263a34f8)![image](https://github.com/user-attachments/assets/03c4d7c0-9083-49d6-a053-c3d4bdd2dd3e)![image](https://github.com/user-attachments/assets/05940d37-eb0c-4160-8209-e596669b9d11)# GWAS Labs Y3 Advanced Genetics & Cell Biology
 ## Lab 1 - Data QC and Population Stratification
 
 Today we will be performing the first part of two-part practical lab series on conducting a genome-wide association study (GWAS). In this session we will be performing quality control (QC) on our input genotype matrix, followed by an investigation of population stratification using principal component analysis (PCA). 
@@ -172,10 +172,10 @@ We won’t need anything other than the SNP columns for PCA. For simplicity, we 
 
 `snp_matrix <- apply(genetic_matrix_7[,7:ncol(genetic_matrix_7)], 2, replace_na_with_mean)`
 
-Now let us perform the PCA using the prcomp function. We will calculate the first 5 principal components. 
+Now let us perform the PCA using the prcomp function. We will calculate the first 2 principal components. 
 
 ```
-pca_result <- prcomp(snp_matrix, center=TRUE, scale.=TRUE,rank.=5)
+pca_result <- prcomp(snp_matrix, center=TRUE, scale.=TRUE,rank.=2)
 pca_scores <- as.data.frame(pca_result$x)
 pca_scores$IID <- genetic_matrix_7$IID
 head(pca_scores)
@@ -252,9 +252,65 @@ theme_minimal() +
 theme(legend.title=element_blank())
 ```
 
-- [ ] **Lab Task 7: Do the samples fall broadly where we expect them to in PCA-space? (Answer: Yes. These European samples fall within the European-associated cluster))**
+- [ ] **Lab Task 7: Do the samples fall broadly where we expect them to in PCA-space? (Answer: Yes. These European samples fall within the European-associated cluster)**
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # GWAS Labs Y3 Advanced Genetics & Cell Biology
 ## Lab 2 - GWAS and PRS
 Today we will be performing the second part of two-part practical lab series on conducting a genome-wide association study (GWAS). 
+
+Our phenotype is binary but our encoding should be 0 and 1. 
+
+`genetic_matrix_8$PHENOTYPE <- genetic_matrix_8$PHENOTYPE - 1`
+
+Let’s make a list of our SNPs.
+
+`list_of_snps <- colnames(genetic_matrix_8)[7:length(colnames(genetic_matrix_8))]`
+ 
+ We can try regression out on the first SNP. 
+
+```
+single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_8[[list_of_snps[1]]], data = genetic_matrix_8, family="binomial")
+summary(single_snp_glm)
+```
+
+- [ ] **Lab Task 1: What are the effect size and p-value of the SNP (Answer: -0.9, 0.09)**
+
+Let's redo this analysis with principcal components (PCs) included as covariates to account for enviromental effects and population stratification. We already have the pca_scores object from our previous lab. 
+
+```
+genetic_matrix_9 <- merge(genetic_matrix_8, pca_scores, by.x = "IID", by.y = "IID") 
+single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_9[[list_of_snps[1]]] + PC1 + PC2, data = genetic_matrix_9, family="binomial")
+summary(single_snp_glm)
+```
+
+ Let’s initialize a summary statistics object where we can keep a record of all our effect sizes and p-values. 
+
+```
+summary_stats <- data.frame(EffectSize = numeric(), PValue = numeric(), stringsAsFactors = FALSE)
+summary_stats[list_of_snps[1], "PValue"] <- coef(summary(single_snp_glm))[,4][2]
+summary_stats[list_of_snps[1], "EffectSize"] <- coef(summary(single_snp_glm))[,1][2]
+print(summary_stats)
+```     
+
+
+
+Now we can loop through all the other SNPs and sort the summary statistics by the p-values. 
+
+`for (i in seq_along(list_of_snps)) {
+single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_9[[list_of_snps[i]]] + PC1 + PC2, data = genetic_matrix_9, family="binomial")
+summary_stats[list_of_snps[i], "EffectSize"] <- coef(summary(single_snp_glm))[,1][2]
+summary_stats[list_of_snps[i], "PValue"] <- coef(summary(single_snp_glm))[,4][2]
+}`
