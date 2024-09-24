@@ -171,7 +171,7 @@ manhattan(summary_stats_with_loc, chr="CHR", bp="BP", p="PValue", snp="SNP", mai
 manhattan(subset(summary_stats_with_loc, CHR == 3), chr="CHR", bp="BP", p="PValue", snp="SNP", xlim=c(7000000,9000000), genomewideline=-log10(bonf_alpha), annotatePval = bonf_alpha, annotateTop=FALSE)
 
 snps_to_include <- summary_stats[summary_stats$PValue < 0.001, ] 
-prs <- data.frame(SCORE=numeric(nrow(genetic_matrix_8), IID=character(nrow(genetic_matrix_8)), stringsAsFactors=FALSE)
+prs <- data.frame(SCORE=numeric(nrow(genetic_matrix_8)), IID=character(nrow(genetic_matrix_8)), stringsAsFactors=FALSE)
 
 for (i in 1:nrow(genetic_matrix_8)) {
 snp_values <- genetic_matrix_8[i, 7:ncol(genetic_matrix_8)] 
