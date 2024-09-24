@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/40beeee7-5f64-4684-be27-9bdbebe3122a)![image](https://github.com/user-attachments/assets/99941515-122f-46c3-bdf9-a85f4d810156)![image](https://github.com/user-attachments/assets/5fb51f04-c44f-40a0-a701-d7535f5edff0)![image](https://github.com/user-attachments/assets/51315baf-c6ed-4312-aa50-becc263a34f8)![image](https://github.com/user-attachments/assets/03c4d7c0-9083-49d6-a053-c3d4bdd2dd3e)![image](https://github.com/user-attachments/assets/05940d37-eb0c-4160-8209-e596669b9d11)# GWAS Labs Y3 Advanced Genetics & Cell Biology
+# GWAS Labs Y3 Advanced Genetics & Cell Biology
 ## Lab 1 - Data QC and Population Stratification
 
 Today we will be performing the first part of two-part practical lab series on conducting a genome-wide association study (GWAS). In this session we will be performing quality control (QC) on our input genotype matrix, followed by an investigation of population stratification using principal component analysis (PCA). 
