@@ -46,6 +46,7 @@ replace_na_with_mean <- function(x) {
 
 required_packages <- c("ggplot2", "dplyr", "qqman", "rcompanion")
 check_and_install_packages(required_packages)
+options(scipen=999) #formatting
 
 genetic_matrix_1 <- read.table("genetic_matrix_10K_cleaned.raw", header=TRUE)
 
@@ -169,7 +170,7 @@ summary_stats_with_loc <- merge(summary_stats, bim_file, by.x = "SNP", by.y = "S
 
 manhattan(summary_stats_with_loc, chr="CHR", bp="BP", p="PValue", snp="SNP", main="Manhattan Plot", col=c("blue4", "orange3"), genomewideline=-log10(bonf_alpha), ylim=c(0, -log10(bonf_alpha)+1), cex.axis=0.4, suggestiveline=FALSE)
 
-manhattan(subset(summary_stats_with_loc, CHR == 3), chr="CHR", bp="BP", p="PValue", snp="SNP", xlim=c(7000000,9000000), genomewideline=-log10(bonf_alpha), annotatePval = bonf_alpha, annotateTop=FALSE, suggestiveline=FALSE)
+manhattan(subset(summary_stats_with_loc, CHR == 3), chr="CHR", bp="BP", p="PValue", snp="SNP", xlim=c(4000000,10000000), genomewideline=-log10(bonf_alpha), annotatePval = bonf_alpha, annotateTop=FALSE, suggestiveline=FALSE)
 
 snps_to_include <- summary_stats[summary_stats$PValue < 0.001, ] 
 prs <- data.frame(SCORE=numeric(nrow(genetic_matrix_8)), IID=character(nrow(genetic_matrix_8)), stringsAsFactors=FALSE)
