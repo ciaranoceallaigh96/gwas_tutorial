@@ -67,7 +67,7 @@ check_and_install_packages(required_packages)
 
 We will now load our genetic_matrix: 
 
-`genetic_matrix_1 <- read.table("genetic_matrix_cleaned.raw", header=TRUE)` #REMINDER SNP IDS NEED TO BE CLEANED!
+`genetic_matrix_1 <- read.table("genetic_matrix_10K_cleaned.raw", header=TRUE)` #REMINDER SNP IDS NEED TO BE CLEANED!
 
 Let's take a look at the dataset. 
 
@@ -351,7 +351,7 @@ head(summary_stats_with_loc)
 
 We can also zoom in/
 
-`manhattan(subset(summary_stats_with_loc, CHR == 3), chr="CHR", bp="BP", p="PValue", snp="SNP", xlim=c(7000000,9000000), genomewideline=-log10(bonf_alpha), annotatePval = bonf_alpha, annotateTop=FALSE)`
+`manhattan(subset(summary_stats_with_loc, CHR == 3), chr="CHR", bp="BP", p="PValue", snp="SNP", xlim=c(7000000,9000000), genomewideline=-log10(bonf_alpha), annotatePval = bonf_alpha, annotateTop=FALSE, suggestiveline=FALSE)`
 
 Let’s build a polygenic risk score. The PRS is simply a weighted sum. For each individual we will sum the effect (as estimated by the GWAS) of each SNP, depending on whether or not they have 0, 1, or 2 copies of the risk allele. 
 
