@@ -290,7 +290,7 @@ single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_8[[list_of_snps[1]]], data = ge
 summary(single_snp_glm)
 ```
 
-- [ ] **Lab Task 1: What are the effect size and p-value of the SNP (Answer: -0.9, 0.09)**
+- [ ] **Lab Task 1: What are the effect size and p-value of the SNP (Answer: 0.19, 0.5)**
 
 Let's redo this analysis with principcal components (PCs) included as covariates to account for enviromental effects and population stratification. We already have the pca_scores object from our previous lab. 
 
@@ -351,7 +351,7 @@ head(summary_stats_with_loc)
 `manhattan(summary_stats_with_loc, chr="CHR", bp="BP", p="PValue", snp="SNP", main="Manhattan Plot", col=c("blue4", "orange3"), genomewideline=-log10(bonf_alpha), ylim=c(0, -log10(bonf_alpha)+1), cex.axis=0.4, suggestiveline=FALSE)`
 
 
-We can also zoom in/
+We can also zoom in
 
 `manhattan(subset(summary_stats_with_loc, CHR == 3), chr="CHR", bp="BP", p="PValue", snp="SNP", xlim=c(4000000,10000000), genomewideline=-log10(bonf_alpha), annotatePval = bonf_alpha, annotateTop=FALSE, suggestiveline=FALSE)`
 
@@ -398,4 +398,4 @@ result <- nagelkerke(prs_model)
 result$Pseudo.R.squared.for.model.vs.null[3]
 ```
 
-- [ ] **Lab Task 4: What percentage of the overall phenotypic variation is being explained by the PRS model? (Answer:))**
+- [ ] **Lab Task 4: What percentage of the overall phenotypic variation is being explained by the PRS model? (Answer:72%))**
