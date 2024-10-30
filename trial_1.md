@@ -70,7 +70,7 @@ options(scipen=999) #formatting command to prevent the use of E-notation.
 
 We will now load our genetic_matrix: 
 
-`genetic_matrix_1 <- read.table("genetic_matrix_10K_cleaned.raw", header=TRUE)` #REMINDER SNP IDS NEED TO BE CLEANED!
+`genetic_matrix_1 <- read.table("genetic_matrix_10K_cleaned.raw", header=TRUE)` 
 
 Let's take a look at the dataset. 
 
@@ -93,7 +93,7 @@ We can now begin our QC. Let's first calculate the missing genotype proportion p
 idv_missingness <- rowMeans(is.na(genetic_matrix_1))
 missing_individual_df <- data.frame(IID = genetic_matrix_1$IID, Missing_Proportion = idv_missingness)
 ```
-- [ ] **Lab Task 1: Calculate the mean missingness of the individuals in this dataset (Answer: 0.19%)**
+- [ ] **Lab Task 1: Calculate the mean missingness of the individuals in this dataset**
 
 Let's take a look at the individuals with the most missingness by ordering the data:
 
@@ -111,7 +111,7 @@ We should remove individuals with a missingness of more than 1%:
 genetic_matrix_2 <- genetic_matrix_1[idv_missingness <= 0.01,]
 ```
 
-- [ ] **Lab Task 2: Calculate how many individuals were removed? (Answer: 2)**
+- [ ] **Lab Task 2: Calculate how many individuals were removed?**
 
 Let's do a similar QC step except this time in terms of SNPs. We want to calcuate the amount of missingness per SNP:
 
@@ -121,7 +121,7 @@ missing_snp_df <- data.frame(SNP= colnames(genetic_matrix_2)[7:ncol(genetic_matr
 hist(missing_snp_df$Missing_Proportion, main="Histogram of SNP Missingness", xlab="Missing Proportion", ylab="Frequency")
 ````
 
-- [ ] **Lab Task 3: Remove SNPs with more than 2% missingness 
+- [ ] **Lab Task 3: Remove SNPs with more than 2% missingness**
 
 We've now done two important QC steps. The next step will be to select only the autosomal SNPs to simplify our analysis. 
 
