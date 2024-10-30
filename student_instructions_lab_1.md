@@ -120,7 +120,7 @@ missing_snp_df <- data.frame(SNP= colnames(genetic_matrix_2)[7:ncol(genetic_matr
 hist(missing_snp_df$Missing_Proportion, main="Histogram of SNP Missingness", xlab="Missing Proportion", ylab="Frequency")
 ````
 
-- [ ] **Lab Task 3: Remove SNPs with more than 2% missingness (Answer: The dimensions of your genetic_matrix_3 object should now be 107 X 49945)**
+- [ ] **Lab Task 3: Remove SNPs with more than 2% missingness (Answer: 65 snpS REMOVED. The dimensions of your genetic_matrix_3 object should now be 108 X 9943)**
 #genetic_matrix_3 <- genetic_matrix_2[,snp_missingness <= 0.02]
 
 We've now done two important QC steps. The next step will be to select only the autosomal SNPs to simplify our analysis. 
