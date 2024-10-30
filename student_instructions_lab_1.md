@@ -187,7 +187,7 @@ Now we can plot the first two principcal components of variation.
 
 `plot(pca_scores$PC1, pca_scores$PC2, xlab="PC1", ylab="PC2", main="PCA of Genetic Data")`
 
-It looks like we have two outliers on the PC1 axis. We possibly have three more outliers on the PC2 axis. There are multiple ways to define an outlier - one of which is any point that falls more than six standard deviations from the mean PC value. We will use this to define and remove our outliers here. 
+It looks like we have three outliers on the PC1 axis. There are no apparent outliers on the PC2 axis. There are multiple ways to define an outlier - one of which is any point that falls more than six standard deviations from the mean PC value. We will use this to define and remove our outliers here. 
 
 ```
 pc1_upper_threshold <- mean(pca_scores$PC1) + 6 * sd(pca_scores$PC1)
