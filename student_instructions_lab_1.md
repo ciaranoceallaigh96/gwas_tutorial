@@ -9,6 +9,8 @@ Our tutorial dataset is a case/control cohort of X individuals of European ances
 
 The input file "genetic_matrix.raw" has a row for every individual in the dataset. The first six columns contain information on the individual (including phenotype) and the remaining columns contain the minor allele dosage of each SNP (0, 1, or 2). 
 
+Data can be downloaded from https://drive.google.com/drive/folders/1nuv4UdJ7MKDOPRDTLAhj3hZYsO01sUsn?usp=drive_link
+
 First we must define our functions that we will be using:
 
 ```
