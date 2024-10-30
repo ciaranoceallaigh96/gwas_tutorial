@@ -49,7 +49,7 @@ check_and_install_packages(required_packages)
 
 genetic_matrix_1 <- read.table("genetic_matrix_10K_cleaned.raw", header=TRUE)
 
-bim_file <- read.table("genetic_matrix.bim", header=FALSE)
+bim_file <- read.table("genetic_matrix_10K.bim", header=FALSE)
 colnames(bim_file) <- c("CHR", "SNP", "CM", "BP", "A1", "A2")
 head(bim_file)
 
