@@ -1,3 +1,4 @@
+setwd('//wsl.localhost/Ubuntu-22.04/home/oceallc/GWA_tutorial/1_QC_GWAS/')
 # Function to check, install, and load packages
 check_and_install_packages <- function(packages) {
   # Loop over the list of packages
