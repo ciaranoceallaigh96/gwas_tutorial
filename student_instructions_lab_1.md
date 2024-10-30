@@ -117,6 +117,7 @@ Let's do a similar QC step except this time in terms of SNPs. We want to calcuat
 ```
 snp_missingness <- colMeans(is.na(genetic_matrix_2[, 7:ncol(genetic_matrix_2)]))
 missing_snp_df <- data.frame(SNP= colnames(genetic_matrix_2)[7:ncol(genetic_matrix_2)], Missing_Proportion = snp_missingness)
+hist(missing_snp_df$Missing_Proportion, main="Histogram of SNP Missingness", xlab="Missing Proportion", ylab="Frequency")
 ````
 
 - [ ] **Lab Task 3: Remove SNPs with more than 2% missingness (Answer: The dimensions of your genetic_matrix_3 object should now be 107 X 49945)**
