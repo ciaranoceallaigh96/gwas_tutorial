@@ -79,7 +79,7 @@ genetic_matrix_1[1:5,1:10] #Taking a peak
 We should also load our BIM file which has the SNP information:
 
 ```
-bim_file <- read.table("genetic_matrix.bim", header=FALSE)
+bim_file <- read.table("genetic_matrix_10K.bim", header=FALSE)
 colnames(bim_file) <- c("CHR", "SNP", "CM", "BP", "A1", "A2")
 head(bim_file)
 ```
