@@ -161,7 +161,7 @@ genetic_matrix_7 <- genetic_matrix_6[, c(1:6, which(hwe_p_values_all >= 1e-10) +
 
 Before, we move onto the princicpal component analysis. Let us take a look at how many SNPs and Individuals were removed during our QC processes. 
 
-- [ ] **Lab Task 5: Calculate how many SNPs and Individuals were removed across all QC steps (Answer: 3 individuals and 509 SNPs removed))**
+- [ ] **Lab Task 5: Calculate how many SNPs and Individuals were removed across all QC steps (Answer: 2 individuals and 115 SNPs removed))**
 #dim(genetic_matrix_1) - dim(genetic_matrix_7)
 
 We now need to perform PCA on our genotype matrix. This transformation will find the vectors (PCs) that explain the most variation across the entire matrix. 
