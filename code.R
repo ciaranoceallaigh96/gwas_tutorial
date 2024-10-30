@@ -191,7 +191,7 @@ ggplot(genetic_matrix_10, aes(x = SCORE, fill = as.factor(PHENOTYPE))) +
   geom_density(alpha = 0.5) +
   labs(
     title = "Distribution of PRS by Case (1) and Control (0) Status",
-    x = "PRS",
+    x = "Polygenic Score (Unitless)",
     y = "Density",
     fill = "Phenotype"
   ) +
