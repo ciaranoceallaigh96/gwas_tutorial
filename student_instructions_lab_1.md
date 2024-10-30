@@ -110,7 +110,7 @@ We should remove individuals with a missingness of more than 1%:
 genetic_matrix_2 <- genetic_matrix_1[idv_missingness <= 0.01,]
 ```
 
-- [ ] **Lab Task 2: Calculate how many individuals were removed? (Answer: 3)**
+- [ ] **Lab Task 2: Calculate how many individuals were removed? (Answer: 2)**
 #compare orginal dim(genetic_matrix_2) to dim(genetic_matrix) OR sum(idv_missingness>0.01)
 Let's do a similar QC step except this time in terms of SNPs. We want to calcuate the amount of missingness per SNP:
 
