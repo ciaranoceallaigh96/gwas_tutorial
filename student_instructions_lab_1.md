@@ -145,12 +145,12 @@ We need to exclude any SNPs that are completely out of Hardy-Weinberg Equilibriu
 - [ ] **Lab Task 4: Create two new objects from genotype_matrix, one for cases and one for controls (Answer: You should have 53 cases and 53 controls.)**
 #controls <- genetic_matrix_5[genetic_matrix_5$PHENOTYPE == 1, ]
 #cases <- genetic_matrix_5[genetic_matrix_5$PHENOTYPE == 2, ]
-Let’s apply a stringent p-value threshold (1e-6) for the control SNPs as we should expect them all to be roughly in HWE.
+Let’s apply a stringent p-value threshold (1e-5) for the control SNPs as we should expect them all to be roughly in HWE.
 
 ```
 hwe_p_values_controls <- apply(controls[, 7:ncol(controls)], 2, calculate_hwe)
 head(hwe_p_values_controls)
-genetic_matrix_6 <- genetic_matrix_5[, c(1:6, which(hwe_p_values_controls >= 1e-6) + 6)]
+genetic_matrix_6 <- genetic_matrix_5[, c(1:6, which(hwe_p_values_controls >= 1e-5) + 6)]
 ```
 Let’s now apply a less stringent p-value threshold for cases and controls together (1e-10)
 
