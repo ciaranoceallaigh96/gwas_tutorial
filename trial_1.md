@@ -217,7 +217,11 @@ The first few PCs tend to capture broad ancestry patterns in the data.
 
 We use PCA to detect genetic outliers, to ensure our sample is genetically homogenous (as a proxy for environmental homogeneity), and to then use as covariates in our futrue GWAS regression (to further account for any environmental effects). 
 
-We won’t need anything other than the SNP columns for PCA. For simplicity, we will also replace any NA genotype values with the mean value of the corresponsing value (using a pre-built function). 
+This is an image of what a typical PCA plot of mixed populations might look like. Clearly, the individuals do not form one homogenous population.<br><br>
+
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/pca_example.png" alt="PCA Example" width="75%">
+
+<br><br>We won’t need anything other than the SNP columns for PCA. For simplicity, we will also replace any NA genotype values with the mean value of the corresponsing value (using a pre-built function). 
 
 ```
 snp_matrix <- apply(genetic_matrix_7[,7:ncol(genetic_matrix_7)], 2, replace_na_with_mean)
