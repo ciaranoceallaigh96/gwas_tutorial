@@ -219,7 +219,7 @@ We use PCA to detect genetic outliers, to ensure our sample is genetically homog
 
 This is an image of what a typical PCA plot of mixed populations might look like. Clearly, the individuals do not form one homogenous population.<br><br>
 
-<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/pca_example.png" alt="PCA Example" width="75%">
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/pca_example.png" alt="PCA Example" width="50%">
 
 <br><br>We won’t need anything other than the SNP columns for PCA. For simplicity, we will also replace any NA genotype values with the mean value of the corresponsing value (using a pre-built function). 
 
