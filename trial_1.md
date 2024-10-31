@@ -68,9 +68,11 @@ check_and_install_packages(required_packages)
 options(scipen=999) #formatting command to prevent the use of E-notation. 
 ```
 
+Below is the basic workflow we will be following in this lab. <br><br>
+
 ![GWAS QC Flowchart](https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/QC%20Flowchart%20Graph.png){: width="50%"}
 
-We will now load our genetic_matrix: 
+<br><br><br> As a first step, we will load our genetic_matrix: 
 
 `genetic_matrix_1 <- read.table("genetic_matrix_10K_cleaned.raw", header=TRUE)` 
 
