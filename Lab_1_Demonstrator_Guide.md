@@ -368,7 +368,7 @@ theme_minimal() +
 theme(legend.title=element_blank())
 ```
 
-- [ ] **Lab Task 7: Do the samples fall broadly where we expect them to in PCA-space?**
+- [ ] **Lab Task 7: Do the samples fall broadly where we expect them to in PC-space?**
 
 Answer: Yes. These European samples fall within the European-associated cluster. It is also not suprising that there is a cline in the admixed individuals, some may have more European ancestry than others. 
 
