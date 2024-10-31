@@ -257,7 +257,7 @@ Let's remove the outlier(s).
 genetic_matrix_8 <- genetic_matrix_7[-pc1_outliers,]
 ```
 
-- [ ] **Lab Task 6: Remove all outliers on the PC2 axis, if any. **
+- [ ] **Lab Task 6: Remove all outliers on the PC2 axis, if any.**
 
 
 Let us see where these samples fall on a global sample by using labelled data from the 1000 Genomes project. 
