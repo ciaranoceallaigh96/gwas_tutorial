@@ -60,6 +60,14 @@ replace_na_with_mean <- function(x) {
 }
 ```
 
+<pre style="background-color: #f5f5dc; padding: 10px;">
+<code>
+# Sample code
+def hello_world():
+    print("Hello, World!")
+</code>
+</pre>
+
 Now, we will load (and install if needed) the relevant packages:
 
 ```
