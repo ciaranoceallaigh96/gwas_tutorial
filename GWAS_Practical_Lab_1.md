@@ -148,7 +148,7 @@ Do you understand the difference between missing_individual_df and missing_snp_d
 We can also make a histrogram as before. 
 
 ```
-hist(missing_snp_df$Missing_Proportion, main="Histogram of SNP Missingness", xlab="Missing Proportion", ylab="Frequency")
+hist(missing_snp_df$Missing_Proportion, main="Histogram of SNP Missingness", xlab="Missing Proportion", ylab="Number of SNPs")
 ```
 
 - [ ] **Lab Task 3: Remove SNPs with more than 2% missingness**
