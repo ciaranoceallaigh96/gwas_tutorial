@@ -70,20 +70,22 @@ options(scipen=999) #formatting command to prevent the use of E-notation.
 
 Below is the basic workflow we will be following in this lab.<br><br>
 
-<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/QC%20Flowchart%20Graph.png" alt="GWAS QC" width="50%">
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/QC%20Flowchart%20Graph.png" alt="GWAS QC" width="75%">
 
 <br><br> As a first step, we will load our genetic_matrix: 
 
-`genetic_matrix_1 <- read.table("genetic_matrix_10K_cleaned.raw", header=TRUE)` 
+```
+genetic_matrix_1 <- read.table("genetic_matrix_10K_cleaned.raw", header=TRUE)` 
+```
 
-Let's take a look at the dataset. 
+Let's take a look at the dataset. How many SNPs and individuals does our matrix contain?
 
 ```
+genetic_matrix_1[1:5,1:10] #Take a peak
 dim(genetic_matrix_1)
-genetic_matrix_1[1:5,1:10] #Taking a peak
 ```
 
-We should also load our BIM file which has the SNP information:
+We will also load our BIM file, which has the SNP information:
 
 ```
 bim_file <- read.table("genetic_matrix_10K.bim", header=FALSE)
@@ -91,23 +93,31 @@ colnames(bim_file) <- c("CHR", "SNP", "CM", "BP", "A1", "A2")
 head(bim_file)
 ```
 
+Do you understand how the BIM file relates to the genotype matrix?
+
 We can now begin our QC. Let's first calculate the missing genotype proportion per individual:
 
 ```
 idv_missingness <- rowMeans(is.na(genetic_matrix_1))
 missing_individual_df <- data.frame(IID = genetic_matrix_1$IID, Missing_Proportion = idv_missingness)
+head(missing_individual_df)
 ```
+
 - [ ] **Lab Task 1: Calculate the mean missingness of the individuals in this dataset**
 
 Let's take a look at the individuals with the most missingness by ordering the data:
 
-`head(missing_individual_df[order(-missing_individual_df$Missing_Proportion), ])`
+```
+head(missing_individual_df[order(-missing_individual_df$Missing_Proportion), ])`
+```
 
 We can visualize the ammount of individuals missingness in our data using a histogram:
 
 ```
 hist(missing_individual_df$Missing_Proportion, main="Histogram of Individual Missingness", xlab="Missing Proportion", ylab="Frequency")
 ```
+
+Can you interpet what this graph is showing you? 
 
 We should remove individuals with a missingness of more than 1%:
 
