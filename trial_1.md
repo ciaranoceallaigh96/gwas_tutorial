@@ -14,7 +14,7 @@ Data can be downloaded from https://drive.google.com/drive/folders/1nuv4UdJ7MKDO
 If you have downloaded the files into your Downloads folder you should switch to that directory in RSudio as follows:
 
 ```
-setwd"C:/Users/johndoe/Downloads"
+setwd("C:/Users/johndoe/Downloads")
 ```
 
 Ask your demonstrator for help if you run into issues getting into the directory your files are saved to. 
@@ -83,7 +83,7 @@ Below is the basic workflow we will be following in this lab.<br><br>
 <br><br> As a first step, we will load our genetic_matrix: 
 
 ```
-genetic_matrix_1 <- read.table("genetic_matrix_10K_cleaned.raw", header=TRUE)` 
+genetic_matrix_1 <- read.table("genetic_matrix_10K_cleaned.raw", header=TRUE)
 ```
 
 Let's take a look at the dataset. How many SNPs and individuals does our matrix contain?
@@ -116,7 +116,7 @@ head(missing_individual_df)
 Let's take a look at the individuals with the most missingness by ordering the data:
 
 ```
-head(missing_individual_df[order(-missing_individual_df$Missing_Proportion), ])`
+head(missing_individual_df[order(-missing_individual_df$Missing_Proportion), ])
 ```
 
 We can visualize the ammount of individuals missingness in our data using a histogram:
