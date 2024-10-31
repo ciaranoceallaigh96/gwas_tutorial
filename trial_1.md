@@ -68,6 +68,8 @@ check_and_install_packages(required_packages)
 options(scipen=999) #formatting command to prevent the use of E-notation. 
 ```
 
+![GWAS QC Flowchart](https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/QC%20Flowchart%20Graph.png)
+
 We will now load our genetic_matrix: 
 
 `genetic_matrix_1 <- read.table("genetic_matrix_10K_cleaned.raw", header=TRUE)` 
