@@ -112,6 +112,7 @@ head(missing_individual_df)
 ```
 
 - [ ] **Lab Task 1: Calculate the mean missingness of the individuals in this dataset**
+
 (Answer: 0.19%)
 
 mean(idv_missingness)
@@ -143,6 +144,7 @@ genetic_matrix_2 <- genetic_matrix_1[idv_missingness <= 0.01,]
 ```
 
 - [ ] **Lab Task 2: Calculate how many individuals were removed.**
+
 Answer: 2
 
 compare orginal dim(genetic_matrix_2) to dim(genetic_matrix)
@@ -169,6 +171,7 @@ hist(missing_snp_df$Missing_Proportion, main="Histogram of SNP Missingness", xla
 ```
 
 - [ ] **Lab Task 3: Remove SNPs with more than 2% missingness**
+
 Answer: 65 SNPs removed. The dimensions of your genetic_matrix_3 object should now be 108 X 9943. 
 
 To remove: genetic_matrix_3 <- genetic_matrix_2[,snp_missingness <= 0.02]
@@ -209,7 +212,7 @@ For disease cases we will use a less stringent threshold, as it possible selecti
 
 - [ ] **Lab Task 4: Create two new objects from genotype_matrix, one for cases and one for controls. (You may need to consult lecture slides)**
 
-Answer: You should have 53 cases and 54 controls.
+Answer: You should have 53 cases and 54 controls. (one individual has missing phenotype information which is marked by -9 if anyone is aking). 
 
 controls <- genetic_matrix_5[genetic_matrix_5$PHENOTYPE == 1, ]
 
@@ -238,6 +241,7 @@ How many SNPs were removed?
 Before, we move onto the princicpal component analysis. Let us take a look at how many SNPs and Individuals were removed during our QC processes. 
 
 - [ ] **Lab Task 5: Calculate how many SNPs and Individuals were removed across all QC steps**
+
 Answer: 2 individuals and 115 SNPs removed.
 
 dim(genetic_matrix_1) - dim(genetic_matrix_7)
@@ -294,6 +298,7 @@ genetic_matrix_8 <- genetic_matrix_7[-pc1_outliers,]
 ```
 
 - [ ] **Lab Task 6: Remove all outliers on the PC2 axis, if any.**
+
 Answer: There are no PC2 outliers according to the above defintion. You can discuss how abritrary some of our definitions of outlier can be.
 
 pc2_upper_threshold <- mean(pca_scores$PC2) + 6 * sd(pca_scores$PC2)
@@ -364,5 +369,6 @@ theme(legend.title=element_blank())
 ```
 
 - [ ] **Lab Task 7: Do the samples fall broadly where we expect them to in PCA-space?**
+
 Answer: Yes. These European samples fall within the European-associated cluster. It is also not suprising that there is a cline in the admixed individuals, some may have more European ancestry than others. 
 
