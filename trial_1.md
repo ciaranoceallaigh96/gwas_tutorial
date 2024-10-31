@@ -5,7 +5,7 @@ Today we will be performing the first part of two-part practical lab series on c
 
 We will first use a tutorial dataset, and you will be given another dataset at the end of this session with which to do your own analysis and upload a final lab report. Full instructions for this assignment will be available on Moodle. All genotype information in these sessions are real, but for privacy purposes, the phenotypes are simulated. 
 
-Our tutorial dataset is a case/control cohort of X individuals of European ancestries genotyped at Y SNPs across the genome. We want to perform a GWAS on the binary disease phenotype and subsequently build a polygenic risk score (PRS). 
+Our tutorial dataset is a case/control cohort of 110 individuals of European ancestries genotyped at 10002 SNPs across the genome. In the second practical session we will perform a GWAS on the binary disease phenotype and subsequently build a polygenic risk score (PRS) to predict case/control status. 
 
 The input file "genetic_matrix_10K_cleaned.raw" has a row for every individual in the dataset. The first six columns contain information on the individual (including phenotype) and the remaining columns contain the minor allele dosage of each SNP (0, 1, or 2). 
 
