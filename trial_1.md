@@ -11,7 +11,15 @@ The input file "genetic_matrix_10K_cleaned.raw" has a row for every individual i
 
 Data can be downloaded from https://drive.google.com/drive/folders/1nuv4UdJ7MKDOPRDTLAhj3hZYsO01sUsn?usp=drive_link
 
-First we must define some functions that we will be using:
+If you have downloaded the files into your Downloads folder you should switch to that directory in RSudio as follows:
+
+```
+setwd"C:/Users/johndoe/Downloads"
+```
+
+Ask your demonstrator for help if you run into issues getting into the directory your files are saved to. 
+
+First, we must define some functions that we will be using:
 
 ```
 # Function to check, install, and load packages
@@ -60,14 +68,6 @@ replace_na_with_mean <- function(x) {
 }
 ```
 
-<pre style="background-color: #ffe5e5; padding: 10px;">
-<code>
-# Sample code
-def hello_world():
-    print("Hello, World!")
-</code>
-</pre>
-
 Now, we will load (and install if needed) the relevant packages:
 
 ```
@@ -106,7 +106,7 @@ Do you understand how the BIM file relates to the genotype matrix?
 We can now begin our QC. Let's first calculate the missing genotype proportion per individual:
 
 ```
-idv_missingness <- rowMeans(is.na(genetic_matrix_1))
+idv_missingness <- rowMeans(is.na(genetic_matrix_1)) 
 missing_individual_df <- data.frame(IID = genetic_matrix_1$IID, Missing_Proportion = idv_missingness)
 head(missing_individual_df)
 ```
@@ -127,44 +127,66 @@ hist(missing_individual_df$Missing_Proportion, main="Histogram of Individual Mis
 
 Can you interpet what this graph is showing you? 
 
-We should remove individuals with a missingness of more than 1%:
+We will remove individuals with a missingness of more than 1%:
 
 ```
 genetic_matrix_2 <- genetic_matrix_1[idv_missingness <= 0.01,]
 ```
 
-- [ ] **Lab Task 2: Calculate how many individuals were removed?**
+- [ ] **Lab Task 2: Calculate how many individuals were removed.**
 
 Let's do a similar QC step except this time in terms of SNPs. We want to calcuate the amount of missingness per SNP:
 
 ```
 snp_missingness <- colMeans(is.na(genetic_matrix_2[, 7:ncol(genetic_matrix_2)]))
 missing_snp_df <- data.frame(SNP= colnames(genetic_matrix_2)[7:ncol(genetic_matrix_2)], Missing_Proportion = snp_missingness)
+head(missing_snp_df)
+```
+
+Do you understand the difference between missing_individual_df and missing_snp_df? 
+
+We can also make a histrogram as before. 
+
+```
 hist(missing_snp_df$Missing_Proportion, main="Histogram of SNP Missingness", xlab="Missing Proportion", ylab="Frequency")
-````
+```
 
 - [ ] **Lab Task 3: Remove SNPs with more than 2% missingness**
 
-We've now done two important QC steps. The next step will be to select only the autosomal SNPs to simplify our analysis. 
+We've now completed two important QC steps. 
+
+The next step will be to select only the autosomal SNPs to simplify our analysis. 
 
 ```
 autosomal_snps <- bim_file[bim_file$CHR >= 1 & bim_file$CHR <= 22, "SNP"]
 autosomal_snps <- c(colnames(genetic_matrix_3)[1:6], autosomal_snps) #add the first six columns as well
 genetic_matrix_4 <- genetic_matrix_3[, colnames(genetic_matrix_3) %in% autosomal_snps]
+dim(genetic_matrix_4)
 ```  
 
-We now want to use a filter for minor allele freqeuncy (MAF). We will remove variants below a 5% freqeuncy threshold:
+How many non-autosomal SNPs were removed?
+
+We now want to use a filter for minor allele freqeuncy (MAF). We can use a pre-built function called calculate_maf. 
 
 ```
 maf_values <- apply(genetic_matrix_4[, 7:ncol(genetic_matrix_4)], 2, calculate_maf) #The 2 simply indicates that the function should be applied to each column. 
 head(maf_values)
 hist(maf_values, main="MAF Distribution", xlab = "MAF", ylab = "Minor Allele Frequency", breaks=20)
+```
+
+Can you interpret the resultant histrogram?
+
+We will remove variants below a 5% frequency threshold:
+
+```
 genetic_matrix_5 <- genetic_matrix_4[, c(1:6, which(maf_values >= 0.05) + 6)]
 ```
 
-We need to exclude any SNPs that are completely out of Hardy-Weinberg Equilibrium (HWE), as measured by a Chi-squared test. If a SNP is out of equilibrium it could suggest a genotyping error – however for disease cases we should have a less stringent threshold as it possible selection against the disease allele could lead to deviances from HWE. 
+We now need to exclude any SNPs that are completely out of Hardy-Weinberg Equilibrium (HWE), as measured by a Chi-squared test. If a SNP is out of equilibrium it could suggest a genotyping error. 
 
-- [ ] **Lab Task 4: Create two new objects from genotype_matrix, one for cases and one for controls.**
+For disease cases we will use a less stringent threshold, as it possible selection against the disease allele could lead to deviances from HWE. 
+
+- [ ] **Lab Task 4: Create two new objects from genotype_matrix, one for cases and one for controls. (You may need to consult lecture slides)**
 
 Let’s apply a stringent p-value threshold (1e-5) for the control SNPs as we should expect them all to be roughly in HWE.
 
@@ -173,12 +195,17 @@ hwe_p_values_controls <- apply(controls[, 7:ncol(controls)], 2, calculate_hwe)
 head(hwe_p_values_controls)
 genetic_matrix_6 <- genetic_matrix_5[, c(1:6, which(hwe_p_values_controls >= 1e-5) + 6)]
 ```
+
+How many SNPs were removed?
+
 Let’s now apply a less stringent p-value threshold for cases and controls together (1e-10)
 
 ```
 hwe_p_values_all <- apply(genetic_matrix_6[, 7:ncol(genetic_matrix_6)], 2, calculate_hwe)
 genetic_matrix_7 <- genetic_matrix_6[, c(1:6, which(hwe_p_values_all >= 1e-10) + 6)]
 ```
+
+How many SNPs were removed?
 
 Before, we move onto the princicpal component analysis. Let us take a look at how many SNPs and Individuals were removed during our QC processes. 
 
@@ -188,11 +215,13 @@ We now need to perform PCA on our genotype matrix. This transformation will find
 
 The first few PCs tend to capture broad ancestry patterns in the data. 
 
-We use PCA to detect genetic outliers, to ensure our sample is genetically homogenous (as a proxy for environmental homogeneity), and to then use as covariates in our GWAS regression (to further account for any environmental effects). 
+We use PCA to detect genetic outliers, to ensure our sample is genetically homogenous (as a proxy for environmental homogeneity), and to then use as covariates in our futrue GWAS regression (to further account for any environmental effects). 
 
-We won’t need anything other than the SNP columns for PCA. For simplicity, we will also replace any NA genotype values with the mean value of the corresponsing value. 
+We won’t need anything other than the SNP columns for PCA. For simplicity, we will also replace any NA genotype values with the mean value of the corresponsing value (using a pre-built function). 
 
-`snp_matrix <- apply(genetic_matrix_7[,7:ncol(genetic_matrix_7)], 2, replace_na_with_mean)`
+```
+snp_matrix <- apply(genetic_matrix_7[,7:ncol(genetic_matrix_7)], 2, replace_na_with_mean)
+```
 
 Now let us perform the PCA using the prcomp function. We will calculate the first 2 principal components. 
 
@@ -205,9 +234,13 @@ head(pca_scores)
 
 Now we can plot the first two principcal components of variation. 
 
-`plot(pca_scores$PC1, pca_scores$PC2, xlab="PC1", ylab="PC2", main="PCA of Genetic Data")`
+```
+plot(pca_scores$PC1, pca_scores$PC2, xlab="PC1", ylab="PC2", main="PCA of Genetic Data")
+```
 
-It looks like we have three outliers on the PC1 axis. There are no apparent outliers on the PC2 axis. There are multiple ways to define an outlier - one of which is any point that falls more than six standard deviations from the mean PC value. We will use this to define and remove our outliers here. 
+It looks like we might have three outliers on the PC1 axis. There are also potential outliers on the PC2 axis. 
+
+There are multiple ways to define an outlier - one of which is any point that falls more than six standard deviations from the mean PC value. We will use this to define and remove our outliers here: 
 
 ```
 pc1_upper_threshold <- mean(pca_scores$PC1) + 6 * sd(pca_scores$PC1)
@@ -215,17 +248,30 @@ pc1_lower_threshold <- mean(pca_scores$PC1) - 6 * sd(pca_scores$PC1)
 
 pc1_outliers <- which(pca_scores$PC1 > pc1_upper_threshold | pca_scores$PC1 < pc1_lower_threshold)
 pca_scores[pc1_outliers,]
+```
+
+Are you surprised by this result? Feel free to discuss with your demonstrator. 
+
+Let's remove the outlier(s). 
+```
 genetic_matrix_8 <- genetic_matrix_7[-pc1_outliers,]
 ```
 
 - [ ] **Lab Task 6: Remove all outliers on the PC2 axis, if any. **
 
 
-Let us see where these samples fall on a global sample by using labelled data from the 1000 Genomes project. QC has already been done on this data. Before merging, we must be sure to make sure the two matrices share the same SNPs.
+Let us see where these samples fall on a global sample by using labelled data from the 1000 Genomes project. 
+
+QC has already been done on this data. 
 
 ```
 global_matrix <- read.table("lab_1_1000G_cleaned.raw", header=TRUE)
 dim(global_matrix)
+```
+
+Before merging, we must be sure to make sure the two matrices share the same SNPs.
+
+```
 shared_columns <- intersect(colnames(genetic_matrix_8), colnames(global_matrix))
 ```
 
@@ -240,12 +286,14 @@ dim(merged_matrix)
 
 Let us also load in the population codes of the individuals of the 1000 Genomes project. 
 
+They’ve give been given broad superpopulation labels: “AFR=African”, “EUR=European”, “ASN=Asian”,  “AMR=Admixed American”
+
 ```
 population_codes <- read.table("population_file_lab_1.txt", header=TRUE)
 head(population_codes)
 ```
 
-Let’s redo our PCA with the merged matrix. We will calculate the first two PCS. We will then add back in the population info to each sample. Our own sample will remain NA so we will label it "my_sample". 
+Let’s redo our PCA with the merged matrix. We will calculate the first two PCS. We will then add back in the population info to each sample. Our own samples will remain NA so we will label it "my_sample". 
 
 ```
 merged_snp_matrix <- as.matrix(merged_matrix[, 7:ncol(merged_matrix)])
@@ -259,7 +307,7 @@ head(merged_pca_scores)
 merged_pca_scores[is.na(merged_pca_scores)] <- "my_sample"
 ```
 
-Let us now plot out our PCs from the 1000 G samples. They’ve give been given broad superpopulation labels: “AFR=African”, “EUR=European”, “ASN=Asian”,  “AMR=Admixed American”
+Let us now plot out our PCs from the 1000G samples. 
 
 ```
 colours <- c("EUR" = "red", "ASN" = "blue", "AFR" = "green", "AMR" = "purple", "my_sample" = "orange")
