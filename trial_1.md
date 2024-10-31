@@ -11,7 +11,7 @@ The input file "genetic_matrix_10K_cleaned.raw" has a row for every individual i
 
 Data can be downloaded from https://drive.google.com/drive/folders/1nuv4UdJ7MKDOPRDTLAhj3hZYsO01sUsn?usp=drive_link
 
-First we must define our functions that we will be using:
+First we must define some functions that we will be using:
 
 ```
 # Function to check, install, and load packages
@@ -60,7 +60,7 @@ replace_na_with_mean <- function(x) {
 }
 ```
 
-Now, we will load (and installl if needed) the relevant packages:
+Now, we will load (and install if needed) the relevant packages:
 
 ```
 required_packages <- c("ggplot2", "dplyr", "qqman", "rcompanion")
@@ -68,7 +68,7 @@ check_and_install_packages(required_packages)
 options(scipen=999) #formatting command to prevent the use of E-notation. 
 ```
 
-![GWAS QC Flowchart](https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/QC%20Flowchart%20Graph.png)
+![GWAS QC Flowchart](https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/QC%20Flowchart%20Graph.png){: width="50%"}
 
 We will now load our genetic_matrix: 
 
