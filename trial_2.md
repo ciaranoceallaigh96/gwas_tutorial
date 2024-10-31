@@ -2,6 +2,10 @@
 ## Lab 2 - GWAS and PRS
 Today we will be performing the second part of two-part practical lab series on conducting a genome-wide association study (GWAS). In the last session, we performed quality control (QC) on our data and computed the princicpal compoents of the genotype matrix that we can use as GWAS covariates. In this session, we will perform the actual GWAS on ~10,000 SNPs and then conduct a polygenic risk score (PRS) that can be used to discriminate between cases and controls. 
 
+All genotype information in these sessions are real, but for privacy purposes, the phenotypes are simulated.
+
+Our tutorial dataset is a case/control cohort of 107 individuals of European ancestries genotyped at ~10,000 SNPs across the genome.
+
 Our phenotype is binary but our encoding should be 0 and 1. 
 
 `genetic_matrix_8$PHENOTYPE <- genetic_matrix_8$PHENOTYPE - 1`
