@@ -209,7 +209,7 @@ For disease cases we will use a less stringent threshold, as it possible selecti
 
 - [ ] **Lab Task 4: Create two new objects from genotype_matrix, one for cases and one for controls. (You may need to consult lecture slides)**
 
-Answer: You should have 53 cases and 53 controls.
+Answer: You should have 53 cases and 54 controls.
 
 controls <- genetic_matrix_5[genetic_matrix_5$PHENOTYPE == 1, ]
 
