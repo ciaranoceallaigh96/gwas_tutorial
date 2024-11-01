@@ -146,3 +146,37 @@ result$Pseudo.R.squared.for.model.vs.null[3]
 ```
 
 - [ ] **Lab Task 4: What percentage of the overall phenotypic variation is being explained by the PRS model? (Answer:72%))**
+
+
+```
+genetic_matrix_JPT <- read.table("genetic_matrix_JPT.raw", header=TRUE)
+JPT_prs <- data.frame(SCORE=numeric(nrow(genetic_matrix_JPT)), IID=character(nrow(genetic_matrix_JPT)), stringsAsFactors=FALSE)
+
+for (i in 1:nrow(genetic_matrix_JPT)) {
+snp_values <- genetic_matrix_JPT[i, 7:ncol(genetic_matrix_JPT)]
+match_indices <- match(names(genetic_matrix_JPT)[7:ncol(genetic_matrix_JPT)], snps_to_include$SNP)
+effect_sizes <- snps_to_include$EffectSize[match_indices]
+JPT_prs$SCORE[i] <- sum(effect_sizes * snp_values, na.rm = TRUE)
+JPT_prs$IID[i] <- genetic_matrix_JPT$IID[i]
+}
+
+genetic_matrix_JPT_with_prs <- merge(genetic_matrix_JPT, JPT_prs, by.x="IID", by.y ="IID")
+
+ggplot(genetic_matrix_JPT_with_prs, aes(x = SCORE, fill = as.factor(PHENOTYPE))) +
+  geom_density(alpha = 0.5) +
+  labs(
+    title = "Distribution of PRS by Case (1) and Control (0) Status",
+    x = "Polygenic Score (Unitless)",
+    y = "Density",
+    fill = "Phenotype"
+  ) +
+  theme_minimal()
+```
+
+It looks like our discrimnation is a lot worse, in the more distant population. 
+
+```
+JPT_prs_model <- glm(PHENOTYPE ~ SCORE, data = genetic_matrix_JPT_with_prs, family=binomial)
+result <- nagelkerke(JPT_prs_model)
+result$Pseudo.R.squared.for.model.vs.null[3]
+```
