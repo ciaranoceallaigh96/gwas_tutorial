@@ -8,12 +8,16 @@ Our tutorial dataset is a case/control cohort of 107 individuals of European anc
 
 Our phenotype is binary but our encoding should be 0 and 1. 
 
-`genetic_matrix_8$PHENOTYPE <- genetic_matrix_8$PHENOTYPE - 1`
+```
+genetic_matrix_8$PHENOTYPE <- genetic_matrix_8$PHENOTYPE - 1
+```
 
 Let’s make a list of our SNPs.
 
-`list_of_snps <- colnames(genetic_matrix_8)[7:length(colnames(genetic_matrix_8))]`
- 
+```
+list_of_snps <- colnames(genetic_matrix_8)[7:length(colnames(genetic_matrix_8))]
+ ```
+
  We can try regression out on the first SNP. 
 
 ```
@@ -44,13 +48,14 @@ print(summary_stats)
 
 Now we can loop through all the other SNPs and sort the summary statistics by the p-values. 
 
-`for (i in seq_along(list_of_snps)) {
+```
+for (i in seq_along(list_of_snps)) {
 single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_9[[list_of_snps[i]]] + PC1 + PC2, data = genetic_matrix_9, family="binomial")
 summary_stats[list_of_snps[i], "EffectSize"] <- coef(summary(single_snp_glm))[,1][2]
 summary_stats[list_of_snps[i], "PValue"] <- coef(summary(single_snp_glm))[,4][2]
 }
 summary_stats$SNP <- rownames(summary_stats)
-`
+```
 
 Let's look at our top SNPs
 
@@ -67,6 +72,7 @@ number_of_tests <- length(list_of_snps)
 
 
 Now, filter all SNPs with p-value below this threshold
+```
 significant_snps <- summary_stats[summary_stats$PValue < bonf_alpha, ]
 significant_snps
 ```
@@ -79,12 +85,15 @@ summary_stats_with_loc <- merge(summary_stats, bim_file, by.x = "SNP", by.y = "S
 head(summary_stats_with_loc)
 ```
 
-`manhattan(summary_stats_with_loc, chr="CHR", bp="BP", p="PValue", snp="SNP", main="Manhattan Plot", col=c("blue4", "orange3"), genomewideline=-log10(bonf_alpha), ylim=c(0, -log10(bonf_alpha)+1), cex.axis=0.4, suggestiveline=FALSE)`
+```
+manhattan(summary_stats_with_loc, chr="CHR", bp="BP", p="PValue", snp="SNP", main="Manhattan Plot", col=c("blue4", "orange3"), genomewideline=-log10(bonf_alpha), ylim=c(0, -log10(bonf_alpha)+1), cex.axis=0.4, suggestiveline=FALSE)`
+```
 
+We can also zoom in on a particular region (Chromosome 3). 
 
-We can also zoom in
-
-`manhattan(subset(summary_stats_with_loc, CHR == 3), chr="CHR", bp="BP", p="PValue", snp="SNP", xlim=c(4000000,10000000), genomewideline=-log10(bonf_alpha), annotatePval = bonf_alpha, annotateTop=FALSE, suggestiveline=FALSE)`
+```
+manhattan(subset(summary_stats_with_loc, CHR == 3), chr="CHR", bp="BP", p="PValue", snp="SNP", xlim=c(4000000,10000000), genomewideline=-log10(bonf_alpha), annotatePval = bonf_alpha, annotateTop=FALSE, suggestiveline=FALSE)`
+```
 
 Let’s build a polygenic risk score. The PRS is simply a weighted sum. For each individual we will sum the effect (as estimated by the GWAS) of each SNP, depending on whether or not they have 0, 1, or 2 copies of the risk allele. 
 
@@ -109,6 +118,7 @@ We can add our PRS results back on our genotype matrix object.
 genetic_matrix_10 <- merge(genetic_matrix_9, prs, by.x="IID", by.y ="IID")
 ```
 
+```
 ggplot(genetic_matrix_10, aes(x = SCORE, fill = as.factor(PHENOTYPE))) +
   geom_density(alpha = 0.5) +
   labs(
@@ -118,9 +128,12 @@ ggplot(genetic_matrix_10, aes(x = SCORE, fill = as.factor(PHENOTYPE))) +
     fill = "Phenotype"
   ) +
   theme_minimal()
+```
 
+Le us now calculate how well our PRS model is discriminating between cases and controls.  
+```
 prs_model <- glm(PHENOTYPE ~ SCORE, data = genetic_matrix_10, family=binomial)
-
+```
 
 How can we measure the success of a PRS? One metric is called R^2 (coefficient of determination) which ranges between 0 and 1, and can be interpreted as the amount of variation being explained by the model. For binary traits, we use a modified R^2 called Nagelkerke’s R^2 
 
