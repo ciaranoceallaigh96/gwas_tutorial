@@ -57,9 +57,11 @@ summary_stats[list_of_snps[i], "PValue"] <- coef(summary(single_snp_glm))[,4][2]
 summary_stats$SNP <- rownames(summary_stats)
 ```
 
-Let's look at our top SNPs
+Let's look at our top SNPs:
 
+```
 head(summary_stats[order(summary_stats$PValue), ])
+```
 
 A negative effect size ( log(OR) ) means the allele is a protective allele rather than a risk allele. 
 
