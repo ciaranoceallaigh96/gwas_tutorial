@@ -68,6 +68,7 @@ A negative effect size ( log(OR) ) means the allele is a protective allele rathe
 ```
 alpha <- 0.05
 number_of_tests <- length(list_of_snps)
+bonf_alpha <- alpha / number_of_tests
 ```
 
 - [ ] **Lab Task 2: Perform a bonferonni adjust on our alpha value and create the bonf_alpha variable (Answer: bonf_alpha <- alpha / number_of_tests)**
