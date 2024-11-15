@@ -11,7 +11,7 @@ The input file "genetic_matrix_10K_cleaned.raw" has a row for every individual i
 
 Data can be downloaded from https://drive.google.com/drive/folders/1nuv4UdJ7MKDOPRDTLAhj3hZYsO01sUsn?usp=drive_link
 
-If you have downloaded the files into your Downloads folder you should switch to that directory in RSudio as follows:
+If you have downloaded the files into your Downloads folder you should switch to that directory in RStudio as follows:
 
 ```
 setwd("C:/Users/johndoe/Downloads")
