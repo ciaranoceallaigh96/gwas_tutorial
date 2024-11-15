@@ -215,7 +215,7 @@ We now need to perform PCA on our genotype matrix. This transformation will find
 
 The first few PCs tend to capture broad ancestry patterns in the data. 
 
-We use PCA to detect genetic outliers, to ensure our sample is genetically homogenous (as a proxy for environmental homogeneity), and to then use as covariates in our futrue GWAS regression (to further account for any environmental effects). 
+We use PCA to detect genetic outliers, to ensure our sample is genetically homogenous (as a proxy for environmental homogeneity), and to then use as covariates in our future GWAS regression (to further account for any environmental effects). 
 
 This is an image of what a typical PCA plot of mixed populations might look like. Clearly, the individuals do not form one homogenous population.<br><br>
 
