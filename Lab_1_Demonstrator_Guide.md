@@ -135,6 +135,10 @@ We can visualize the ammount of individuals missingness in our data using a hist
 hist(missing_individual_df$Missing_Proportion, main="Histogram of Individual Missingness", xlab="Missing Proportion", ylab="Frequency")
 ```
 
+
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/hist_idv_missingness.PNG" alt="GWAS QC" width="75%">
+
+
 Can you interpet what this graph is showing you? 
 
 We will remove individuals with a missingness of more than 1%:
