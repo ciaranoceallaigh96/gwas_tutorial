@@ -290,6 +290,11 @@ Now we can plot the first two principcal components of variation.
 plot(pca_scores$PC1, pca_scores$PC2, xlab="PC1", ylab="PC2", main="PCA of Genetic Data")
 ```
 
+
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/pca.PNG" alt="GWAS QC" width="75%">
+
+
+
 It looks like we might have three outliers on the PC1 axis. There are also potential outliers on the PC2 axis. 
 
 There are multiple ways to define an outlier - one of which is any point that falls more than six standard deviations from the mean PC value. We will use this to define and remove our outliers here: 
@@ -379,6 +384,10 @@ labs(title="PCA of Genetic Data", x="PC1", y="PC2") +
 theme_minimal() +
 theme(legend.title=element_blank())
 ```
+
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/pca2.PNG" alt="GWAS QC" width="75%">
+
+
 
 - [ ] **Lab Task 7: Do the samples fall broadly where we expect them to in PC-space?**
 
