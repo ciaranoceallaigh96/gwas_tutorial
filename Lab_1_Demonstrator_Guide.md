@@ -206,6 +206,10 @@ head(maf_values)
 hist(maf_values, main="MAF Distribution", xlab = "MAF", ylab = "Minor Allele Frequency", breaks=20)
 ```
 
+
+
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/hist_maf.PNG" alt="GWAS QC" width="75%">
+
 Can you interpret the resultant histrogram?
 
 We will remove variants below a 5% frequency threshold:
