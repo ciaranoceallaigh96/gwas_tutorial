@@ -179,7 +179,7 @@ significant_snps
 How many significant SNPs do we have?
 
 
-<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/manhattan.png" alt="GWAS QC" width="75%">
+<img src="https://github.com/att-y3-gcb/att_y3_gcb_GWAS/blob/main/manhattan.png" alt="GWAS QC" width="75%">
 
 
 Let’s now make a Manhattan plot. We first need to refer to our bim file to get the genomic location of each SNP. We can update our summary stats to also include the chromosomal location of each SNP. 
