@@ -1,6 +1,6 @@
 # GWAS Labs Y3 Advanced Genetics & Cell Biology
 
-<img src="https://github.com/att-y3-gcb/gwas_tutorial/blob/main/manhattan.png" alt="GWAS QC" width="75%">
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/manhattan.png" alt="GWAS QC" width="75%">
 
 
 ## Lab 2 - GWAS and PRS
@@ -93,7 +93,7 @@ summary(single_snp_glm)
 
 - [ ] **Lab Task 1: What are the effect size and p-value of the SNP (Answer: 0.19, 0.5)**
 
-<img src="https://github.com/att-y3-gcb/gwas_tutorial/blob/main/summary1.PNG" alt="GWAS QC" width="50%">
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/summary1.PNG" alt="GWAS QC" width="50%">
 
 
 The effect from a logistic regresion is reported as the log of the odds ratio, or log(OR). To convert this to a more interpretable number, you can find the exponent. 
@@ -127,7 +127,7 @@ summary(single_snp_glm)
 
 - [ ] **Lab Task 2: What is the new effect size and p-value of the SNP once ancestry/enviroment is taken into account? (Answer: 0.21, 0.45)**
 
-<img src="https://github.com/att-y3-gcb/gwas_tutorial/blob/main/summary2.PNG" alt="GWAS QC" width="50%">
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/summary2.PNG" alt="GWAS QC" width="50%">
 
 
  Let’s initialize a summary statistics object where we can keep a record of all our effect sizes and p-values. 
@@ -179,7 +179,7 @@ significant_snps
 How many significant SNPs do we have?
 
 
-<img src="https://github.com/att-y3-gcb/gwas_tutorial/blob/main/manhattan.png" alt="GWAS QC" width="75%">
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/manhattan.png" alt="GWAS QC" width="75%">
 
 
 Let’s now make a Manhattan plot. We first need to refer to our bim file to get the genomic location of each SNP. We can update our summary stats to also include the chromosomal location of each SNP. 
@@ -196,7 +196,7 @@ A manhattan plot shows the genomic location along the x-axis and the p-value (no
 manhattan(summary_stats_with_loc, chr="CHR", bp="BP", p="PValue", snp="SNP", main="Manhattan Plot", col=c("blue4", "orange3"), genomewideline=-log10(bonf_alpha), ylim=c(0, -log10(bonf_alpha)+1), cex.axis=0.4, suggestiveline=FALSE)
 ```
 
-<img src="https://github.com/att-y3-gcb/gwas_tutorial/blob/main/manhattan3.PNG" alt="GWAS QC" width="50%">
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/manhattan3.PNG" alt="GWAS QC" width="50%">
 
 
 Can you make sense of this graph? Look at the peak(s). 
@@ -208,12 +208,12 @@ We can also zoom in on a particular peak to really get a sense of what is going 
 manhattan(subset(summary_stats_with_loc, CHR == 3), chr="CHR", bp="BP", p="PValue", snp="SNP", xlim=c(4000000,10000000), genomewideline=-log10(bonf_alpha), annotatePval = bonf_alpha, annotateTop=FALSE, suggestiveline=FALSE)
 ```
 
-<img src="https://github.com/att-y3-gcb/gwas_tutorial/blob/main/manhattan32.PNG" alt="GWAS QC" width="50%">
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/manhattan32.PNG" alt="GWAS QC" width="50%">
 
 
 Congratulations! You have performed a mini-GWAS from start to finish. You might choose to focus on figuring out which gene(s) are implicated in your phenotype (and how) but this involves a lot of follow-up work. Instead, one can build a polygenic risk score from the results of the GWAS. This is because now we know how much each SNP contributes to the phenotype through the effect size. We can calculate each individuals sum of risk alleles. 
 
-<img src="https://github.com/att-y3-gcb/gwas_tutorial/blob/main/polygenic.PNG" alt="GWAS QC" width="50%">
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/polygenic.PNG" alt="GWAS QC" width="50%">
 
 
 So let’s build the polygenic risk score. The PRS is simply a weighted sum. For each individual we will sum the effect (as estimated by the GWAS) of each SNP, depending on whether or not they have 0, 1, or 2 copies of the minor allele. 
@@ -260,7 +260,7 @@ ggplot(genetic_matrix_10, aes(x = SCORE, fill = as.factor(PHENOTYPE))) +
   theme_minimal()
 ```
 
-<img src="https://github.com/att-y3-gcb/gwas_tutorial/blob/main/prs.PNG" alt="GWAS QC" width="50%">
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/prs.PNG" alt="GWAS QC" width="50%">
 
 
 There seems to be very good discrimination between cases and controls. Can we put a number on this?
@@ -330,7 +330,7 @@ ggplot(genetic_matrix_JPT_with_prs, aes(x = SCORE, fill = as.factor(PHENOTYPE)))
   theme_minimal()
 ```
 
-<img src="https://github.com/att-y3-gcb/gwas_tutorial/blob/main/jptprs.PNG" alt="GWAS QC" width="50%">
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/jptprs.PNG" alt="GWAS QC" width="50%">
 
 
 It looks like our discrimnation is a lot worse, in the more distant population. This is because our SNPs are no longer properly tagging the underlying causal variation through the differences in LD between variants. 
@@ -345,4 +345,4 @@ result$Pseudo.R.squared.for.model.vs.null[3]
 
 It is thus vitally important for the future of precision medicine that we ensure genomics studies (such as GWAS) are done on diverse populations, so that the benefits (PRS prediction) can reach everyone. 
 
-<img src="https://github.com/att-y3-gcb/gwas_tutorial/blob/main/diversity.PNG" alt="GWAS QC" width="75%">
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/diversity.PNG" alt="GWAS QC" width="75%">
