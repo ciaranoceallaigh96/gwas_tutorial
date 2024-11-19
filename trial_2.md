@@ -58,8 +58,8 @@ genetic_matrix_8 <- read.table("genetic_matrix_8.raw", header=TRUE)
 Let's take a look at the dataset. How many SNPs and individuals does our matrix contain?
 
 ```
-genetic_matrix_1[1:5,1:10] #Take a peak
-dim(genetic_matrix_1)
+genetic_matrix_8[1:5,1:10] #Take a peak
+dim(genetic_matrix_8)
 ```
 
 We will also load our BIM file, which has the SNP information:
