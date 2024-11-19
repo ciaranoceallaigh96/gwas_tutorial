@@ -235,7 +235,7 @@ We can add our PRS results back on our genotype matrix object.
 genetic_matrix_10 <- merge(genetic_matrix_9, prs, by.x="IID", by.y ="IID")
 ```
 
-The PRS is a little hard to interpret.....maybe if we plot out the PRS distribution in cases vs. controls we can get a better feel for how well we can predict case status. 
+The PRS is a little hard to interpret...maybe if we plot out the PRS distribution in cases vs. controls we can get a better feel for how well we can predict case status. 
 
 ```
 ggplot(genetic_matrix_10, aes(x = SCORE, fill = as.factor(PHENOTYPE))) +
@@ -272,7 +272,7 @@ result$Pseudo.R.squared.for.model.vs.null[3]
 
 That's capturing almost all of the genetic variation in the trait! Unfortunatly, one should always be cautious in testing a model on data it was trained on i.e. testing a PRS on the same population that the GWAS was performed on. It's far better to test a model on an independant dataset. 
 
-We will use a Japanese=ancestry population to test the predictive performance of our PRS. 
+We will use a Japanese-ancestry population to test the predictive performance of our PRS. 
 
 The GWAS was performed on individuals of European ancestry and so we can expect this PRS to perform worse for several reasons. 
 
