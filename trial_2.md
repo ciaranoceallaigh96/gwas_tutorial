@@ -316,7 +316,7 @@ ggplot(genetic_matrix_JPT_with_prs, aes(x = SCORE, fill = as.factor(PHENOTYPE)))
   theme_minimal()
 ```
 
-It looks like our discrimnation is a lot worse, in the more distant population. 
+It looks like our discrimnation is a lot worse, in the more distant population. This is because our SNPs are no longer properly tagging the underlying causal variation through the differences in LD between variants. 
 
 - [ ] **Lab Task 6: What percentage of the overall phenotypic variation is being explained by the PRS model? (Answer:16%))**
 
