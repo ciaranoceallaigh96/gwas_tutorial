@@ -202,7 +202,7 @@ manhattan(subset(summary_stats_with_loc, CHR == 3), chr="CHR", bp="BP", p="PValu
 
 Congratulations! You have performed a mini-GWAS from start to finish. You might choose to focus on figuring out which gene(s) are implicated in your phenotype (and how) but this involves a lot of follow-up work. Instead, one can build a polygenic risk score from the results of the GWAS. This is because now we know how much each SNP contributes to the phenotype through the effect size. We can calculate each individuals sum of risk alleles. 
 
-<img src="https://github.com/att-y3-gcb/att_y3_gcb_GWAS/blob/main/polygenic.png" alt="GWAS QC" width="75%">
+<img src="https://github.com/att-y3-gcb/att_y3_gcb_GWAS/blob/main/polygenic.PNG" alt="GWAS QC" width="75%">
 
 
 So let’s build the polygenic risk score. The PRS is simply a weighted sum. For each individual we will sum the effect (as estimated by the GWAS) of each SNP, depending on whether or not they have 0, 1, or 2 copies of the minor allele. 
