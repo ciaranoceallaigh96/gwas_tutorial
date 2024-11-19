@@ -10,7 +10,7 @@ All genotype information in these sessions are real, but for privacy purposes, t
 
 Our tutorial dataset is a case/control cohort of 107 individuals of European ancestries genotyped at ~10,000 SNPs across the genome.
 
-Data can be downloaded from https://drive.google.com/drive/folders/1nuv4UdJ7MKDOPRDTLAhj3hZYsO01sUsn?usp=drive_link
+Data can be downloaded from [https://drive.google.com/drive/folders/1nuv4UdJ7MKDOPRDTLAhj3hZYsO01sUsn?usp=drive_link](https://drive.google.com/drive/folders/1HIN9Q742nz-Ffd5TFZ7n4nt0PUT6LMXn?usp=drive_link)
 
 If you have downloaded the files into your Downloads folder you should switch to that directory in RStudio as follows:
 
