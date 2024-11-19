@@ -325,3 +325,6 @@ JPT_prs_model <- glm(PHENOTYPE ~ SCORE, data = genetic_matrix_JPT_with_prs, fami
 result <- nagelkerke(JPT_prs_model)
 result$Pseudo.R.squared.for.model.vs.null[3]
 
+
+It is thus vitally important for the future of precision medicine that we ensure genomics studies (such as GWAS) are done on diverse populations, so that the benefits (PRS prediction) can reach everyone. 
+
