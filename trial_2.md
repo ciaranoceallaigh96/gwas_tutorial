@@ -1,4 +1,8 @@
 # GWAS Labs Y3 Advanced Genetics & Cell Biology
+
+<img src="https://github.com/att-y3-gcb/att_y3_gcb_GWAS/blob/main/manhattan.png" alt="GWAS QC" width="75%">
+
+
 ## Lab 2 - GWAS and PRS
 Today we will be performing the second part of two-part practical lab series on conducting a genome-wide association study (GWAS). In the last session, we performed quality control (QC) on our data and computed the princicpal compoents of the genotype matrix that we can use as GWAS covariates. In this session, we will perform the actual GWAS on ~10,000 SNPs and then conduct a polygenic risk score (PRS) that can be used to discriminate between cases and controls. 
 
