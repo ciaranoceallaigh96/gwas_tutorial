@@ -93,7 +93,15 @@ summary(single_snp_glm)
 
 - [ ] **Lab Task 1: What are the effect size and p-value of the SNP (Answer: 0.19, 0.5)**
 
-Is this the true effect of the SNP on the phenotype? Remember, any ancestry-specific SNP correlated with an enviromental effect might become spuriously associated with the phenotype. We can discount this ancestry-mediated effect by making use of our princicpal components we calcucated in the last lab. Remember, these PCs tend to capture broad ancestry patterns in the genetic data. 
+The effect from a logistic regresion is reported as the log of the odds ratio, or log(OR). To convert this to a more interpretable number, you can find the exponent. 
+
+```
+exp(single_snp_glm$coefficients[2])
+```
+
+This gives us the odds ratio. For a rare outcome this can be interpretated as the relative risk; i.e. a carrier of one copy of the risk allele is 1.2 times as likely to be a case rather than a control. 
+
+But, is this the true effect of the SNP on the phenotype? Remember, any ancestry-specific SNP correlated with an enviromental effect might become spuriously associated with the phenotype. We can discount this ancestry-mediated effect by making use of our princicpal components we calcucated in the last lab. Remember, these PCs tend to capture broad ancestry patterns in the genetic data. 
 
 
 ```
@@ -114,7 +122,7 @@ single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_9[[list_of_snps[1]]] + PC1 + PC
 summary(single_snp_glm)
 ```
 
-- [ ] **Lab Task 2: What is the new effect size and p-value of the SNP once ancestry/enviroment is taken into account? (Answer: x, y)**
+- [ ] **Lab Task 2: What is the new effect size and p-value of the SNP once ancestry/enviroment is taken into account? (Answer: 0.21, 0.45)**
 
 
  Let’s initialize a summary statistics object where we can keep a record of all our effect sizes and p-values. 
