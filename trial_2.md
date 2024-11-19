@@ -220,6 +220,13 @@ prs$SCORE[i] <- sum(effect_sizes * snp_values, na.rm = TRUE)
 prs$IID[i] <- genetic_matrix_8$IID[i]
 }
 ```
+
+Let's take a look at our calculated PRS.
+
+```
+head(prs)
+```
+
 - [ ] **Lab Task 4: What is the mean and standard deviation of the PRS? (Answer: mean(prs$SCORE) and sd(prs$SCORE))**
 
 We can add our PRS results back on our genotype matrix object.
@@ -227,6 +234,8 @@ We can add our PRS results back on our genotype matrix object.
 ```
 genetic_matrix_10 <- merge(genetic_matrix_9, prs, by.x="IID", by.y ="IID")
 ```
+
+The PRS is a little hard to interpret.....maybe if we plot out the PRS distribution in cases vs. controls we can get a better feel for how well we can predict case status. 
 
 ```
 ggplot(genetic_matrix_10, aes(x = SCORE, fill = as.factor(PHENOTYPE))) +
@@ -240,12 +249,19 @@ ggplot(genetic_matrix_10, aes(x = SCORE, fill = as.factor(PHENOTYPE))) +
   theme_minimal()
 ```
 
-Le us now calculate how well our PRS model is discriminating between cases and controls.  
+There seems to be very good discrimination between cases and controls. Can we put a number on this?
+
+Remember, from our lectures that the maxmimum amount of variation of a PRS can be expected to explain is equal to the heritability of a trait i.e. if 80% of the variation in height is due to genetic factos, then a predictive tool built solely from genetic factors (PRS) cannot exceed 80% of variation explained. For the simulated disease phenotype, the heritability has also been set to 80%. 
+
+SO how do we measure the success of a PRS? One metric is called R^2 (coefficient of determination) which ranges between 0 and 1, and can be interpreted as the amount of variation being explained by the model. For binary traits, we use a modified R^2 called Nagelkerke’s R^2. 
+
+To calculate the R^2 we must first try to predict the phenotype using the PRS as the predictor. 
+
 ```
 prs_model <- glm(PHENOTYPE ~ SCORE, data = genetic_matrix_10, family=binomial)
 ```
 
-How can we measure the success of a PRS? One metric is called R^2 (coefficient of determination) which ranges between 0 and 1, and can be interpreted as the amount of variation being explained by the model. For binary traits, we use a modified R^2 called Nagelkerke’s R^2 
+We can know check how much variation in the phenotype our PRS model explains. 
 
 ```
 result <- nagelkerke(prs_model)
@@ -254,9 +270,23 @@ result$Pseudo.R.squared.for.model.vs.null[3]
 
 - [ ] **Lab Task 5: What percentage of the overall phenotypic variation is being explained by the PRS model? (Answer:72%))**
 
+That's capturing almost all of the genetic variation in the trait! Unfortunatly, one should always be cautious in testing a model on data it was trained on i.e. testing a PRS on the same population that the GWAS was performed on. It's far better to test a model on an independant dataset. 
 
+We will use a Japanese=ancestry population to test the predictive performance of our PRS. 
+
+The GWAS was performed on individuals of European ancestry and so we can expect this PRS to perform worse for several reasons. 
+
+Perhaps most importantly, remember that our SNPs may not be causal - the may simply be tagging the causal variant through LD structure. The LD structure differs between the European and Japanese population. Therefore, the SNP we have included in the PRS model may not be predictive at all in the Japanese cohort. 
+
+
+Let's load in our Japanese genotype matrix. 
 ```
 genetic_matrix_JPT <- read.table("genetic_matrix_JPT.raw", header=TRUE)
+```
+
+Now let's set up the PRS calcuation again (using our European GWAS effect sizes from before). 
+
+```
 JPT_prs <- data.frame(SCORE=numeric(nrow(genetic_matrix_JPT)), IID=character(nrow(genetic_matrix_JPT)), stringsAsFactors=FALSE)
 
 for (i in 1:nrow(genetic_matrix_JPT)) {
@@ -267,6 +297,12 @@ JPT_prs$SCORE[i] <- sum(effect_sizes * snp_values, na.rm = TRUE)
 JPT_prs$IID[i] <- genetic_matrix_JPT$IID[i]
 }
 
+head(JPT_prs)
+```
+
+Let us plot out the discrimination this time. 
+
+```
 genetic_matrix_JPT_with_prs <- merge(genetic_matrix_JPT, JPT_prs, by.x="IID", by.y ="IID")
 
 ggplot(genetic_matrix_JPT_with_prs, aes(x = SCORE, fill = as.factor(PHENOTYPE))) +
@@ -282,8 +318,10 @@ ggplot(genetic_matrix_JPT_with_prs, aes(x = SCORE, fill = as.factor(PHENOTYPE)))
 
 It looks like our discrimnation is a lot worse, in the more distant population. 
 
-```
+- [ ] **Lab Task 6: What percentage of the overall phenotypic variation is being explained by the PRS model? (Answer:16%))**
+
+Answer:
 JPT_prs_model <- glm(PHENOTYPE ~ SCORE, data = genetic_matrix_JPT_with_prs, family=binomial)
 result <- nagelkerke(JPT_prs_model)
 result$Pseudo.R.squared.for.model.vs.null[3]
-```
+
