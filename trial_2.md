@@ -328,3 +328,4 @@ result$Pseudo.R.squared.for.model.vs.null[3]
 
 It is thus vitally important for the future of precision medicine that we ensure genomics studies (such as GWAS) are done on diverse populations, so that the benefits (PRS prediction) can reach everyone. 
 
+<img src="https://github.com/att-y3-gcb/att_y3_gcb_GWAS/blob/main/diversity.PNG" alt="GWAS QC" width="75%">
