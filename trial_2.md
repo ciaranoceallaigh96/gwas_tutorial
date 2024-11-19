@@ -220,7 +220,7 @@ prs$SCORE[i] <- sum(effect_sizes * snp_values, na.rm = TRUE)
 prs$IID[i] <- genetic_matrix_8$IID[i]
 }
 ```
-- [ ] **Lab Task 3: What is the mean and standard deviation of the PRS? (Answer: mean(prs$SCORE) and sd(prs$SCORE))**
+- [ ] **Lab Task 4: What is the mean and standard deviation of the PRS? (Answer: mean(prs$SCORE) and sd(prs$SCORE))**
 
 We can add our PRS results back on our genotype matrix object.
 
@@ -252,7 +252,7 @@ result <- nagelkerke(prs_model)
 result$Pseudo.R.squared.for.model.vs.null[3]
 ```
 
-- [ ] **Lab Task 4: What percentage of the overall phenotypic variation is being explained by the PRS model? (Answer:72%))**
+- [ ] **Lab Task 5: What percentage of the overall phenotypic variation is being explained by the PRS model? (Answer:72%))**
 
 
 ```
