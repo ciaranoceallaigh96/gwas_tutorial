@@ -1,6 +1,6 @@
 # GWAS Labs Y3 Advanced Genetics & Cell Biology
 
-<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/manhattan.png" alt="GWAS QC" width="75%">
+<img src="https://github.com/att-y3-gcb/att-y3-gcb/blob/main/manhattan.png" alt="GWAS QC" width="75%">
 
 
 ## Lab 2 - GWAS and PRS
