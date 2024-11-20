@@ -84,7 +84,7 @@ Let’s now make a list of our SNPs.
 list_of_snps <- colnames(genetic_matrix_8)[7:length(colnames(genetic_matrix_8))]
  ```
 
- Remember, a GWAS is just a regression for everyone SNP. We can try regression out on the first SNP. 
+ Remember, a GWAS is just a regression on every SNP. We can try a single regression out on the first SNP. 
 
 ```
 single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_8[[list_of_snps[1]]], data = genetic_matrix_8, family="binomial")
@@ -96,13 +96,15 @@ summary(single_snp_glm)
 <img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/summary1.PNG" alt="GWAS QC" width="50%">
 
 
-The effect from a logistic regresion is reported as the log of the odds ratio, or log(OR). To convert this to a more interpretable number, you can find the exponent. 
+The effect from a logistic regresion is reported as the log of the odds ratio, or log(OR). To convert this to a more interpretable number, you can find the exponent of this number. 
 
 ```
 exp(single_snp_glm$coefficients[2])
 ```
 
-This gives us the odds ratio. For a rare outcome this can be interpretated as the relative risk; i.e. a carrier of one copy of the risk allele is 1.2 times as likely to be a case rather than a control. 
+This gives us the odds ratio. For a rare outcome, this can be interpretated as the relative risk; i.e. a carrier of one copy of the risk allele is 1.2 times as likely to be a case rather than a control. 
+
+A carrier of two copies is 1.2 * 1.2 = 1.44 times as likely to be a case. 
 
 But, is this the true effect of the SNP on the phenotype? Remember, any ancestry-specific SNP correlated with an enviromental effect might become spuriously associated with the phenotype. We can discount this ancestry-mediated effect by making use of our princicpal components we calculated in the last lab. If the association between the SNP and the phenotype is simple due to confounding (as in the image below) we want to remove the association. Remember, these PCs tend to capture broad ancestry patterns in the genetic data and tag enviromental effects. 
 
@@ -116,13 +118,14 @@ pca_scores <- read.table("pca_scores.txt", header=TRUE)
 head(pca_scores)
 ```
 
-We can merge our pca_scores with our genotype matrix.
+To move ahead, let's first merge our pca_scores with our genotype matrix.
 
 ```
-genetic_matrix_9 <- merge(genetic_matrix_8, pca_scores, by.x = "IID", by.y = "IID") 
+genetic_matrix_9 <- merge(genetic_matrix_8, pca_scores, by.x = "IID", by.y = "IID")
+genetic_matrix_9[1:10,1:10]
 ```
 
-Let's redo this analysis with principcal components (PCs) included as covariates to account for enviromental effects and population stratification. This is a simple modification of the regression equation.  
+Let's redo this analysis with principcal components (PCs) included as covariates to account for enviromental effects and population stratification. This can be done with a simple modification to the regression equation.  
 
 ```
 single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_9[[list_of_snps[1]]] + PC1 + PC2, data = genetic_matrix_9, family="binomial")
@@ -161,7 +164,7 @@ Let's look at our top SNPs:
 head(summary_stats[order(summary_stats$PValue), ])
 ```
 
-A negative effect size ( log(OR) ) means the minor allele is a protective allele rather than a risk allele. A GWAS is always reported in reference to the minor (less common allele). Another way of seeing this is that the major (common) allele of the SNP confers risk on the carrier. 
+A negative effect size coefficient (or log(OR)) means the minor allele is a protective allele rather than a risk allele. A GWAS is always reported in reference to the minor (less common allele). Another way of seeing this is that the major (common) allele of the SNP confers risk on the carrier. 
 
 Remember, for a normal GWAS the significance p-value theshold is set to 10^-8. This is beacuse you generally test 1,000,000 independant regions of the genome. Here, we are testing only ~9,000 SNPs so our p-value threshold doesn't need to be as stringent. Let's calculate a threshold appropriate for our analysis. 
 
@@ -194,7 +197,7 @@ summary_stats_with_loc <- merge(summary_stats, bim_file, by.x = "SNP", by.y = "S
 head(summary_stats_with_loc)
 ```
 
-A manhattan plot shows the genomic location along the x-axis and the p-value (not the effect size!) along the y-axis. We have a package function that can take summary statistics and generate a manhattan plot. 
+A manhattan plot shows the genomic location along the x-axis and the p-value (not the effect size!) along the y-axis. We have already loaded a function that can take summary statistics and generate a manhattan plot. 
 
 ```
 manhattan(summary_stats_with_loc, chr="CHR", bp="BP", p="PValue", snp="SNP", main="Manhattan Plot", col=c("blue4", "orange3"), genomewideline=-log10(bonf_alpha), ylim=c(0, -log10(bonf_alpha)+1), cex.axis=0.4, suggestiveline=FALSE)
@@ -215,7 +218,7 @@ manhattan(subset(summary_stats_with_loc, CHR == 3), chr="CHR", bp="BP", p="PValu
 <img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/manhattan32.PNG" alt="GWAS QC" width="50%">
 
 
-Congratulations! You have performed a mini-GWAS from start to finish. You might choose to focus on figuring out which gene(s) are implicated in your phenotype (and how) but this involves a lot of follow-up work. Instead, one can build a polygenic risk score from the results of the GWAS. This is because now we know how much each SNP contributes to the phenotype through the effect size. We can calculate each individuals sum of risk alleles. 
+Congratulations! You have performed a mini-GWAS from start to finish. You might choose to focus on figuring out which gene(s) are implicated in your phenotype (and how), but this involves a lot of follow-up work. Instead, one can build a polygenic risk score from the results of the GWAS. This is because now we know how much each SNP contributes to the phenotype through the effect size. We can calculate each individuals sum of risk alleles. 
 
 <img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/polygenic.PNG" alt="GWAS QC" width="50%">
 
@@ -271,7 +274,7 @@ There seems to be very good discrimination between cases and controls. Can we pu
 
 Remember, from our lectures that the maxmimum amount of variation of a PRS can be expected to explain is equal to the heritability of a trait i.e. if 80% of the variation in height is due to genetic factos, then a predictive tool built solely from genetic factors (PRS) cannot exceed 80% of variation explained. For the simulated disease phenotype, the heritability has also been set to 80%. 
 
-SO how do we measure the success of a PRS? One metric is called R^2 (coefficient of determination) which ranges between 0 and 1, and can be interpreted as the amount of variation being explained by the model. For binary traits, we use a modified R^2 called Nagelkerke’s R^2. 
+So how do we measure the success of a PRS? One metric is called R^2 (coefficient of determination) which ranges between 0 and 1, and can be interpreted as the amount of variation being explained by the model. For binary traits, we use a modified R^2 called Nagelkerke’s R^2. 
 
 To calculate the R^2 we must first try to predict the phenotype using the PRS as the predictor. 
 
