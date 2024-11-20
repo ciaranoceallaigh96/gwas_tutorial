@@ -234,7 +234,9 @@ head(prs)
 
 We do have one problem though, we only found a single significant SNP. Is it okay to include non-signficiant SNPs when constructing a polygenic risk score? If the p-value of the SNP is very high, we can't have much confidence that the effect size we calculated is accurate. 
 
-At the same time, if we include more SNPs in our model we may get more accurate predictions. Generally, geneticists try defining multiple p-value thresholds when building a PRS and then stick with the most accurate one. For the sake of simplicity we will choose a p-value threshold of 0.001 for SNP includsion into our PRS. Any SNP below that threshold will be included. Any SNP above that threshold we will discard as being untrustworthy. 
+At the same time, if we include more SNPs in our model we may get more accurate predictions. Generally, geneticists try defining multiple p-value thresholds when building a PRS and then stick with the most accurate one. For the sake of simplicity we will choose a p-value threshold of 0.001 for SNP inclusion into our PRS. 
+
+Any SNP below that threshold will be included. Any SNP above that threshold we will discard as being untrustworthy. 
 
 
 ```
