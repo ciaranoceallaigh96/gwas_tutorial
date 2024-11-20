@@ -225,10 +225,25 @@ Congratulations! You have performed a mini-GWAS from start to finish. You might 
 
 So let’s build the polygenic risk score. The PRS is simply a weighted sum. For each individual we will sum the effect (as estimated by the GWAS) of each SNP, depending on whether or not they have 0, 1, or 2 copies of the minor allele. 
 
+Let's initialize a empty dataframe that can store our polygenic risk scores for each individual. 
+
+```
+prs <- data.frame(SCORE=numeric(nrow(genetic_matrix_8)), IID=character(nrow(genetic_matrix_8)), stringsAsFactors=FALSE)
+head(prs)
+```
+
+We do have one problem though, we only found a single significant SNP. Is it okay to include non-signficiant SNPs when constructing a polygenic risk score? If the p-value of the SNP is very high, we can't have much confidence that the effect size we calculated is accurate. 
+
+At the same time, if we include more SNPs in our model we may get more accurate predictions. Generally, geneticists try defining multiple p-value thresholds when building a PRS and then stick with the most accurate one. For the sake of simplicity we will choose a p-value threshold of 0.001 for SNP includsion into our PRS. Any SNP below that threshold will be included. Any SNP above that threshold we will discard as being untrustworthy. 
+
+
 ```
 snps_to_include <- summary_stats[summary_stats$PValue < 0.001, ]
-prs <- data.frame(SCORE=numeric(nrow(genetic_matrix_8)), IID=character(nrow(genetic_matrix_8)), stringsAsFactors=FALSE)
+```
 
+Now we are ready to calculate the PRS. We can simply loop trhough each individual and get the sum of their effect sizes multipled by their genotype dosages for each SNP. 
+
+```
 #Loop through all individuals
 for (i in 1:nrow(genetic_matrix_8)) {
 snp_values <- genetic_matrix_8[i, 7:ncol(genetic_matrix_8)]
