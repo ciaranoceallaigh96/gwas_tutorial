@@ -104,7 +104,11 @@ exp(single_snp_glm$coefficients[2])
 
 This gives us the odds ratio. For a rare outcome this can be interpretated as the relative risk; i.e. a carrier of one copy of the risk allele is 1.2 times as likely to be a case rather than a control. 
 
-But, is this the true effect of the SNP on the phenotype? Remember, any ancestry-specific SNP correlated with an enviromental effect might become spuriously associated with the phenotype. We can discount this ancestry-mediated effect by making use of our princicpal components we calcucated in the last lab. Remember, these PCs tend to capture broad ancestry patterns in the genetic data. 
+But, is this the true effect of the SNP on the phenotype? Remember, any ancestry-specific SNP correlated with an enviromental effect might become spuriously associated with the phenotype. We can discount this ancestry-mediated effect by making use of our princicpal components we calculated in the last lab. If the association between the SNP and the phenotype is simple due to confounding (as in the image below) we want to remove the association. Remember, these PCs tend to capture broad ancestry patterns in the genetic data and tag enviromental effects. 
+
+
+<img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/conf.PNG" alt="GWAS QC" width="50%">
+
 
 
 ```
