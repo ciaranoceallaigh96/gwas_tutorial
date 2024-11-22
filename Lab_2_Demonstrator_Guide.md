@@ -166,7 +166,7 @@ head(summary_stats[order(summary_stats$PValue), ])
 
 A negative effect size coefficient (or log(OR)) means the minor allele is a protective allele rather than a risk allele. A GWAS is always reported in reference to the minor (less common allele). Another way of seeing this is that the major (common) allele of the SNP confers risk on the carrier. 
 
-Remember, for a normal GWAS the significance p-value theshold is set to 10^-8. This is beacuse you generally test 1,000,000 independant regions of the genome. Here, we are testing only ~9,000 SNPs so our p-value threshold doesn't need to be as stringent. Let's calculate a threshold appropriate for our analysis. 
+Remember, for a normal GWAS the significance p-value theshold is set to 5 x 10^-8. This is beacuse you generally test 1,000,000 independant regions of the genome. Here, we are testing only ~9,000 SNPs so our p-value threshold doesn't need to be as stringent. Let's calculate a threshold appropriate for our analysis. 
 
 ```
 alpha <- 0.05
