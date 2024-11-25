@@ -306,7 +306,6 @@ result <- nagelkerke(prs_model)
 result$Pseudo.R.squared.for.model.vs.null[3]
 ```
 
-- [ ] **Lab Task 5: What percentage of the overall phenotypic variation is being explained by the PRS model? (Answer:72%))**
 
 That's capturing almost all of the genetic variation in the trait! Unfortunatly, one should always be cautious in testing a model on data it was trained on i.e. testing a PRS on the same population that the GWAS was performed on. It's far better to test a model on an independant dataset. 
 
@@ -359,7 +358,7 @@ ggplot(genetic_matrix_JPT_with_prs, aes(x = SCORE, fill = as.factor(PHENOTYPE)))
 
 It looks like our discrimnation is a lot worse, in the more distant population. This is because our SNPs are no longer properly tagging the underlying causal variation through the differences in LD between variants. 
 
-- [ ] **Lab Task 6: What percentage of the overall phenotypic variation is being explained by the PRS model? (Answer:16%))**
+- [ ] **Lab Task 5: What percentage of the overall phenotypic variation is being explained by the PRS model? (Answer:16%))**
 
 Answer:
 JPT_prs_model <- glm(PHENOTYPE ~ SCORE, data = genetic_matrix_JPT_with_prs, family=binomial)
