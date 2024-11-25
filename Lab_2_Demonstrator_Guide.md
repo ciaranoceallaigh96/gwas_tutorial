@@ -363,7 +363,9 @@ It looks like our discrimnation is a lot worse, in the more distant population. 
 
 Answer:
 JPT_prs_model <- glm(PHENOTYPE ~ SCORE, data = genetic_matrix_JPT_with_prs, family=binomial)
+
 result <- nagelkerke(JPT_prs_model)
+
 result$Pseudo.R.squared.for.model.vs.null[3]
 
 
