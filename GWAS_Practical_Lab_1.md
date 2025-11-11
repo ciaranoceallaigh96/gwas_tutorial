@@ -125,7 +125,7 @@ We can visualize the ammount of individuals missingness in our data using a hist
 hist(missing_individual_df$Missing_Proportion, main="Histogram of Individual Missingness", xlab="Missing Proportion", ylab="Frequency")
 ```
 
-Can you interpet what this graph is showing you? 
+Can you interpret what this graph is showing you? 
 
 We will remove individuals with a missingness of more than 1%:
 
