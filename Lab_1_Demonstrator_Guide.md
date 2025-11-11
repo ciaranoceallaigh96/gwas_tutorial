@@ -139,7 +139,7 @@ hist(missing_individual_df$Missing_Proportion, main="Histogram of Individual Mis
 <img src="https://github.com/ciaranoceallaigh96/gwas_tutorial/blob/main/hist_idv_missingness.PNG" alt="GWAS QC" width="75%">
 
 
-Can you interpet what this graph is showing you? 
+Can you interpret what this graph is showing you? 
 
 We will remove individuals with a missingness of more than 1%:
 
