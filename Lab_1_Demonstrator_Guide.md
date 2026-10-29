@@ -213,7 +213,7 @@ Before, we move onto the princicpal component analysis. Let us take a look at ho
 
 - [ ] **Lab Task 4: Calculate how many SNPs and Individuals were removed across all QC steps**
 
-Answer: 2 individuals and 117 SNPs removed.
+Answer: 2 individuals and 114 SNPs removed.
 
 dim(genetic_matrix_1) - dim(genetic_matrix_5)
 
