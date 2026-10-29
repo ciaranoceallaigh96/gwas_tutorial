@@ -49,17 +49,17 @@ check_and_install_packages(required_packages)
 options(scipen=999) #formatting command to prevent the use of E-notation. 
 ```
 
-As a first step, we will load our post-QC genetic_matrix (this was our genetic_matrix_8 object from the previous practical.): 
+As a first step, we will load our post-QC genetic_matrix (this was our genetic_matrix_6 object from the previous practical.): 
 
 ```
-genetic_matrix_8 <- read.table("genetic_matrix_8.raw", header=TRUE)
+genetic_matrix_6 <- read.table("genetic_matrix_6.raw", header=TRUE)
 ```
 
 Let's take a look at the dataset. How many SNPs and individuals does our matrix contain?
 
 ```
-genetic_matrix_8[1:5,1:10] #Take a peak
-dim(genetic_matrix_8)
+genetic_matrix_6[1:5,1:10] #Take a peak
+dim(genetic_matrix_6)
 ```
 
 We will also load our BIM file, which has the SNP information:
@@ -75,19 +75,19 @@ Hopefully, all this is familiar with you. Feel free to ask if you need clarity o
 We can see the phenotype in our PHENOTYPE column. Our phenotype is binary (2 and 1) but our encoding should be 0 and 1 to make the regression work properly. 
 
 ```
-genetic_matrix_8$PHENOTYPE <- genetic_matrix_8$PHENOTYPE - 1
+genetic_matrix_6$PHENOTYPE <- genetic_matrix_6$PHENOTYPE - 1
 ```
 
 Let’s now make a list of our SNPs.
 
 ```
-list_of_snps <- colnames(genetic_matrix_8)[7:length(colnames(genetic_matrix_8))]
+list_of_snps <- colnames(genetic_matrix_6)[7:length(colnames(genetic_matrix_6))]
  ```
 
  Remember, a GWAS is just a regression on every SNP. We can try a single regression out on the first SNP. 
 
 ```
-single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_8[[list_of_snps[1]]], data = genetic_matrix_8, family="binomial")
+single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_6[[list_of_snps[1]]], data = genetic_matrix_6, family="binomial")
 summary(single_snp_glm)
 ```
 
@@ -121,14 +121,14 @@ head(pca_scores)
 To move ahead, let's first merge our pca_scores with our genotype matrix.
 
 ```
-genetic_matrix_9 <- merge(genetic_matrix_8, pca_scores, by.x = "IID", by.y = "IID")
-genetic_matrix_9[1:10,1:10]
+genetic_matrix_7 <- merge(genetic_matrix_6, pca_scores, by.x = "IID", by.y = "IID")
+genetic_matrix_7[1:10,1:10]
 ```
 
 Let's redo this analysis with principcal components (PCs) included as covariates to account for enviromental effects and population stratification. This can be done with a simple modification to the regression equation.  
 
 ```
-single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_9[[list_of_snps[1]]] + PC1 + PC2, data = genetic_matrix_9, family="binomial")
+single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_7[[list_of_snps[1]]] + PC1 + PC2, data = genetic_matrix_7, family="binomial")
 summary(single_snp_glm)
 ```
 
@@ -151,7 +151,7 @@ Now we can loop through all the other SNPs and sort the summary statistics by th
 
 ```
 for (i in seq_along(list_of_snps)) {
-single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_9[[list_of_snps[i]]] + PC1 + PC2, data = genetic_matrix_9, family="binomial")
+single_snp_glm <- glm(PHENOTYPE ~ genetic_matrix_7[[list_of_snps[i]]] + PC1 + PC2, data = genetic_matrix_7, family="binomial")
 summary_stats[list_of_snps[i], "EffectSize"] <- coef(summary(single_snp_glm))[,1][2]
 summary_stats[list_of_snps[i], "PValue"] <- coef(summary(single_snp_glm))[,4][2]
 }
@@ -228,7 +228,7 @@ So let’s build the polygenic risk score. The PRS is simply a weighted sum. For
 Let's initialize a empty dataframe that can store our polygenic risk scores for each individual. 
 
 ```
-prs <- data.frame(SCORE=numeric(nrow(genetic_matrix_8)), IID=character(nrow(genetic_matrix_8)), stringsAsFactors=FALSE)
+prs <- data.frame(SCORE=numeric(nrow(genetic_matrix_6)), IID=character(nrow(genetic_matrix_6)), stringsAsFactors=FALSE)
 head(prs)
 ```
 
@@ -247,12 +247,12 @@ Now we are ready to calculate the PRS. We can simply loop trhough each individua
 
 ```
 #Loop through all individuals
-for (i in 1:nrow(genetic_matrix_8)) {
-snp_values <- genetic_matrix_8[i, 7:ncol(genetic_matrix_8)]
-match_indices <- match(names(genetic_matrix_8)[7:ncol(genetic_matrix_8)], snps_to_include$SNP)
+for (i in 1:nrow(genetic_matrix_6)) {
+snp_values <- genetic_matrix_6[i, 7:ncol(genetic_matrix_6)]
+match_indices <- match(names(genetic_matrix_6)[7:ncol(genetic_matrix_6)], snps_to_include$SNP)
 effect_sizes <- snps_to_include$EffectSize[match_indices]
 prs$SCORE[i] <- sum(effect_sizes * snp_values, na.rm = TRUE)
-prs$IID[i] <- genetic_matrix_8$IID[i]
+prs$IID[i] <- genetic_matrix_6$IID[i]
 }
 ```
 
@@ -267,13 +267,13 @@ head(prs)
 We can add our PRS results back on our genotype matrix object.
 
 ```
-genetic_matrix_10 <- merge(genetic_matrix_9, prs, by.x="IID", by.y ="IID")
+genetic_matrix_8 <- merge(genetic_matrix_7, prs, by.x="IID", by.y ="IID")
 ```
 
 The PRS is a little hard to interpret...maybe if we plot out the PRS distribution in cases vs. controls we can get a better feel for how well we can predict case status. 
 
 ```
-ggplot(genetic_matrix_10, aes(x = SCORE, fill = as.factor(PHENOTYPE))) +
+ggplot(genetic_matrix_8, aes(x = SCORE, fill = as.factor(PHENOTYPE))) +
   geom_density(alpha = 0.5) +
   labs(
     title = "Distribution of PRS by Case (1) and Control (0) Status",
@@ -296,7 +296,7 @@ So how do we measure the success of a PRS? One metric is called R^2 (coefficient
 To calculate the R^2 we must first try to predict the phenotype using the PRS as the predictor. 
 
 ```
-prs_model <- glm(PHENOTYPE ~ SCORE, data = genetic_matrix_10, family=binomial)
+prs_model <- glm(PHENOTYPE ~ SCORE, data = genetic_matrix_8, family=binomial)
 ```
 
 We can know check how much variation in the phenotype our PRS model explains. 
